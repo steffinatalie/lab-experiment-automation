@@ -1,0 +1,1 @@
+# skripsi_bang_normen
