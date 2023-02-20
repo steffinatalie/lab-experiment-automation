@@ -7,4 +7,5 @@ BUTTON_HEIGHT = 1
 INPUT_TEXT_WIDTH = 4
 INPUT_TEXT_HEIGHT = 1
 
-FILE = "comm.txt"
+FILE_COMMAND = "comm.txt"
+FILE_TIME_CONFIG = "time_conf.txt"

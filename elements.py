@@ -89,14 +89,33 @@ class LeftFrame:
             column=2, row=3
         )
         
-        # create error input handling
-    
+        
+       
+        
+        
+        
+        
+        
+    # create error input handling
+    # create error input handling
+    # create error input handling
+        
+        
     def start(self, event):
         self.start_button.config(
             state="disabled"
         )
-        with open(settings.FILE, 'w') as f:
+        
+        
+        with open(settings.FILE_COMMAND, 'w') as f:
             f.write("start")
+        
+        file_time_config = open(settings.FILE_TIME_CONFIG, 'w')    
+        file_time_config.write(self.input_time_interval.get(1.0, "end-1c") + '\n')
+        file_time_config.write(self.input_read_duration.get(1.0, "end-1c") + '\n')
+        file_time_config.write(self.input_executions.get(1.0, "end-1c") + '\n')
+        file_time_config.close()
+        
         self.stop_button.config(
             state="normal"
         )
@@ -105,7 +124,7 @@ class LeftFrame:
         self.stop_button.config(
             state="disabled"
         )
-        with open(settings.FILE, 'w') as f:
+        with open(settings.FILE_COMMAND, 'w') as f:
             f.write("stop")
         self.start_button.config(
             state="normal"
