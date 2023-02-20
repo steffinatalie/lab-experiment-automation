@@ -15,9 +15,8 @@ class LeftFrame:
         self.start_button.configure(
             text="Start"
         )
-        # bind
-        # bind
-        # bind
+        #bind
+        self.start_button.bind("<Button-1>", self.start)
         
         self.stop_button = Button(
             self.location,
@@ -31,6 +30,25 @@ class LeftFrame:
             text="Stop"
         )
         # bind
-        # bind
-        # bind
+        self.stop_button.bind("<Button-1>", self.stop)
+    
+    def start(self, event):
+        self.start_button.config(
+            state="disabled"
+        )
+        with open(settings.FILE, 'w') as f:
+            f.write("start")
+        self.stop_button.config(
+            state="normal"
+        )
+        
+    def stop(self, event):
+        self.stop_button.config(
+            state="disabled"
+        )
+        with open(settings.FILE, 'w') as f:
+            f.write("stop")
+        self.start_button.config(
+            state="normal"
+        )
         
