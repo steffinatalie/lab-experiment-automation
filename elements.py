@@ -1,6 +1,17 @@
 from tkinter import Button, Text, Label
 import settings
 
+"""
+TODO:
+display how many executions executed
+create n minutes n seconds left until the next reading
+display reading countdown
+create serial monitor
+when window destroyed, kill the other process, but make sure all the files are already flushed
+create experiment time estimation
+
+"""
+
 class LeftFrame:
     def __init__(self, location):
         self.location = location

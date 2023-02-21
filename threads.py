@@ -18,6 +18,9 @@ Read state       : reading, notreading
 TODO:
 - 'stop' affects all the processes
 - read state should also be sent through serial to the other arduino
+- put the files in folders 'topics' 'readings'
+- time_keeper thread
+- change read_state for data_write()
 
 
 """
@@ -34,7 +37,7 @@ def time_keeper():
     
     
 
-def ask_input():
+def experiment_state_check():
     global experiment_state
     
     # while state != "stop":
@@ -103,7 +106,7 @@ def data_write():
 
     file.close()
 
-th = threading.Thread(target=ask_input)
+th = threading.Thread(target=experiment_state_check)
 
 th.start()
 
