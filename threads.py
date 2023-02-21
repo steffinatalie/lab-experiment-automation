@@ -2,11 +2,21 @@ import threading
 import csv
 import time
 import serial
+import settings
 
 state = ""
 count = 0
 ser = serial.Serial("COM4", 9800, timeout=1)
 # check = serial.Serial("COM5", 9800, timeout=1)
+
+def time_keeper():
+    configs = []
+    with open(settings.FILE_TIME_CONFIG, 'r') as f:
+        configs = f.readline()
+        
+    time_interval, read_duration, executions = [configs[i] for i in range(3)]
+    
+    
 
 def ask_input():
     global state
