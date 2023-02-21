@@ -6,7 +6,6 @@ from elements import LeftFrame
 root = Tk()
 root.title("Experiment Control Station")
 
-# ganti fullscreen aja langsung
 root.geometry(f"{settings.WINDOW_WIDTH}x{settings.WINDOW_HEIGHT}") 
 # root.configure(bg="black")
 

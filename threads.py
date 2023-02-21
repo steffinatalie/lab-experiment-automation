@@ -4,7 +4,8 @@ import time
 import serial
 import settings
 
-state = ""
+experiment_state = ""
+read_state =""
 count = 0
 ser = serial.Serial("COM4", 9800, timeout=1)
 # check = serial.Serial("COM5", 9800, timeout=1)
@@ -13,6 +14,11 @@ ser = serial.Serial("COM4", 9800, timeout=1)
 """
 Experiment state : start, stop
 Read state       : reading, notreading
+
+TODO:
+- 'stop' affects all the processes
+- read state should also be sent through serial to the other arduino
+
 
 """
 
@@ -26,9 +32,10 @@ def time_keeper():
     # this should probably have it's own file.txt to command for readings
     
     
+    
 
 def ask_input():
-    global state
+    global experiment_state
     
     # while state != "stop":
         
@@ -63,26 +70,26 @@ def ask_input():
     count = 0
     while count < 10:
         with open(settings.FILE_COMMAND, 'r') as f:
-            state = f.read()
-        print(state)
+            experiment_state = f.read()
+        print(experiment_state)
         time.sleep(2)
         count+=1
             
-        if state == "endread":
-            state = input(">>> ")
+        # if read_state == "endread":
+        #     state = input(">>> ")
            
-        if state == "read":  
-            new_thread = threading.Thread(target=data_write)
-            new_thread.start()
+        # if read_state == "read":  
+        #     new_thread = threading.Thread(target=data_write)
+        #     new_thread.start()
 
 def data_write():
-    global state, count
+    global read_state, count
     
     count += 1
     file = open(f"input{count}.csv", 'w', newline='')
     write = csv.writer(file)
 
-    while state == "read":
+    while read_state == "read":
         line = ser.readline()
         
         try:
