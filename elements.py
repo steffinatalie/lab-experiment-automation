@@ -10,6 +10,9 @@ create serial monitor
 when window destroyed, kill the other process, but make sure all the files are already flushed
 create experiment time estimation
 
+maybe don't ask for reading duration :(
+unless you're willing to try read and write to arduino ahehsdjfhadsf gluck
+
 """
 
 class LeftFrame:
