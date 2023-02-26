@@ -1,5 +1,6 @@
 from tkinter import Button, Text, Label
 import settings
+import threads
 
 """
 TODO:
@@ -9,9 +10,6 @@ display reading countdown
 create serial monitor
 when window destroyed, kill the other process, but make sure all the files are already flushed
 create experiment time estimation
-
-maybe don't ask for reading duration :(
-unless you're willing to try read and write to arduino ahehsdjfhadsf gluck
 
 """
 
@@ -120,8 +118,7 @@ class LeftFrame:
             state="disabled"
         )
         
-        
-        with open(settings.FILE_COMMAND, 'w') as f:
+        with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
             f.write("start")
         
         file_time_config = open(settings.FILE_TIME_CONFIG, 'w')    
@@ -129,6 +126,9 @@ class LeftFrame:
         file_time_config.write(self.input_read_duration.get(1.0, "end-1c") + '\n')
         file_time_config.write(self.input_executions.get(1.0, "end-1c") + '\n')
         file_time_config.close()
+        
+        # run threads.py
+        threads.main()
         
         self.stop_button.config(
             state="normal"
@@ -138,7 +138,7 @@ class LeftFrame:
         self.stop_button.config(
             state="disabled"
         )
-        with open(settings.FILE_COMMAND, 'w') as f:
+        with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
             f.write("stop")
         self.start_button.config(
             state="normal"

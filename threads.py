@@ -7,8 +7,8 @@ import settings
 experiment_state = ""
 read_state =""
 count = 0
-ser = serial.Serial("COM4", 9800, timeout=1)
-# check = serial.Serial("COM5", 9800, timeout=1)
+ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+# ser_actuator = serial.Serial("COM5", 9800, timeout=1)
 
 
 """
@@ -16,6 +16,7 @@ Experiment state : start, stop
 Read state       : reading, notreading
 
 TODO:
+- try the time keeper
 - 'stop' affects all the processes
 - read state should also be sent through serial to the other arduino
 - put the files in folders 'topics' 'readings'
@@ -73,7 +74,7 @@ def experiment_state_check():
     """
     count = 0
     while count < 10:
-        with open(settings.FILE_COMMAND, 'r') as f:
+        with open(settings.FILE_EXPERIMENT_STATE, 'r') as f:
             experiment_state = f.read()
         print(experiment_state)
         time.sleep(2)
@@ -94,7 +95,7 @@ def data_write():
     write = csv.writer(file)
 
     while read_state == "read":
-        line = ser.readline()
+        line = ser_sensor.readline()
         
         try:
             num = int(line.decode())
@@ -107,8 +108,10 @@ def data_write():
 
     file.close()
 
-th = threading.Thread(target=experiment_state_check)
+def main():
 
-th.start()
+    th = threading.Thread(target=experiment_state_check)
+
+    th.start()
 
 

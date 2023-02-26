@@ -25,7 +25,7 @@ right_frame = Frame(
 )
 right_frame.place(x=utils.width_prct(50), y=0)
 
-#buttons
+#frames
 lf = LeftFrame(left_frame)
 
 #run the window 
