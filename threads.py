@@ -7,12 +7,12 @@ import settings
 experiment_state = ""
 read_state =""
 count = 0
-ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+# ser_sensor = serial.Serial("COM4", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
 
 
 """
-Experiment state : start, stop
+Experiment state : start, stop, killed
 Read state       : reading, notreading
 
 TODO:
@@ -22,6 +22,7 @@ TODO:
 - put the files in folders 'topics' 'readings'
 - time_keeper thread
 - change read_state for data_write()
+- handling if arduino not detected
 
 
 
@@ -79,6 +80,9 @@ def experiment_state_check():
         print(experiment_state)
         time.sleep(2)
         count+=1
+        
+        if experiment_state == "killed":
+            return 
             
         # if read_state == "endread":
         #     state = input(">>> ")
@@ -109,9 +113,9 @@ def data_write():
     file.close()
 
 def main():
-
     th = threading.Thread(target=experiment_state_check)
-
     th.start()
+    
+    
 
 

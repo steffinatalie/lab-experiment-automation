@@ -30,3 +30,6 @@ lf = LeftFrame(left_frame)
 
 #run the window 
 root.mainloop()
+
+# print("I'm dead")
+utils.kill()
