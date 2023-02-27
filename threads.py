@@ -7,6 +7,7 @@ import settings
 experiment_state = ""
 read_state =""
 count = 0
+is_timekeeping = False
 # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
 
@@ -23,49 +24,47 @@ TODO:
 - time_keeper thread
 - change read_state for data_write()
 - handling if arduino not detected
+- handling for time keeper if killed (maybe it indeed needs to be killed)
 
 
 
 """
 
+def countdown(n):
+    for i in range(n):
+        print(n-i)
+        time.sleep(0.99)
+
 def time_keeper():
-    configs = []
-    with open(settings.FILE_TIME_CONFIG, 'r') as f:
-        configs = f.readline()
+    global experiment_state, is_timekeeping #read_state
+    
+    if experiment_state == "start":
+        with open(settings.FILE_TIME_CONFIG, 'r') as f:   
+            time_interval, read_duration, executions = [int(f.readline()) for _ in range(3)]
+            # print(time_interval)
+            # print(read_duration)
+            # print(executions)
+            
+        time_interval *= 5 #later to be changed to 60
+        is_timekeeping = True
+        n = 0
+        while n < executions and is_timekeeping == True:
+            # time.sleep(time_interval)
+            countdown(time_interval)
+            print("reading")
+            # read_state = "reading"
+            
+            countdown(read_duration)
+            print("notreading")
+            # read_state = "notreading"
+            
+            n+=1
+            
+    is_timekeeping = False
         
-    time_interval, read_duration, executions = [configs[i] for i in range(3)]
-    
-    # this should probably have it's own file.txt to command for readings
-    
-    
-    
 
 def experiment_state_check():
-    global experiment_state
-    
-    # while state != "stop":
-        
-    #     """
-    #         start       (from gui)
-    #         read        (from serial: check)
-    #         endread     (from serial: check)
-    #         stop        (from gui)
-            
-    #     """
-    #     print("\n")
-    #     print("'start' to begin experiment")
-    #     print("'read' to begin data writing")
-    #     print("'endread' to stop data writing")
-    #     print("'stop' to stop experiment")
-        
-    #     state = input(">>> ")
-        
-    #     if state == "endread":
-    #         state = input(">>> ")
-           
-    #     if state == "read":  
-    #         new_thread = threading.Thread(target=data_write)
-    #         new_thread.start()
+    global experiment_state, is_timekeeping
     
     """
     
@@ -73,49 +72,46 @@ def experiment_state_check():
     later to be changed with kill pid from the gui
     
     """
-    count = 0
-    while count < 10:
+    # count = 0
+    while experiment_state != "killed":
         with open(settings.FILE_EXPERIMENT_STATE, 'r') as f:
             experiment_state = f.read()
         print(experiment_state)
         time.sleep(2)
-        count+=1
+        # count+=1
         
-        if experiment_state == "killed":
-            return 
+        if experiment_state == "stop":
+            is_timekeeping = False
+        
+        if experiment_state == "start" and not is_timekeeping:
+            th = threading.Thread(target=time_keeper)
+            th.start()
             
-        # if read_state == "endread":
-        #     state = input(">>> ")
-           
-        # if read_state == "read":  
-        #     new_thread = threading.Thread(target=data_write)
-        #     new_thread.start()
 
-def data_write():
-    global read_state, count
+# def data_write():
+#     global read_state, count
     
-    count += 1
-    file = open(f"input{count}.csv", 'w', newline='')
-    write = csv.writer(file)
+#     count += 1
+#     file = open(f"input{count}.csv", 'w', newline='')
+#     write = csv.writer(file)
 
-    while read_state == "read":
-        line = ser_sensor.readline()
+#     while read_state == "read":
+#         line = ser_sensor.readline()
         
-        try:
-            num = int(line.decode())
-        except:
-            pass
+#         try:
+#             num = int(line.decode())
+#         except:
+#             pass
         
-        string = str(num)
-        write.writerow([string])
-        time.sleep(1)
+#         string = str(num)
+#         write.writerow([string])
+#         time.sleep(1)
 
-    file.close()
+#     file.close()
 
 def main():
     th = threading.Thread(target=experiment_state_check)
     th.start()
-    
     
 
 

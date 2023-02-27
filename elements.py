@@ -9,6 +9,7 @@ create n minutes n seconds left until the next reading
 display reading countdown
 create serial monitor
 create experiment time estimation
+create warning before closing window during experiment
 
 
 when window destroyed, kill the other process, but make sure all the files are already flushed 
