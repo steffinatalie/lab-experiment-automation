@@ -31,7 +31,11 @@ TODO:
 """
 
 def countdown(n):
+    global is_timekeeping
+    
     for i in range(n):
+        if is_timekeeping == False:
+            break
         print(n-i)
         time.sleep(0.99)
 
@@ -40,7 +44,7 @@ def time_keeper():
     
     if experiment_state == "start":
         with open(settings.FILE_TIME_CONFIG, 'r') as f:   
-            time_interval, read_duration, executions = [int(f.readline()) for _ in range(3)]
+            time_interval, read_duration, executions = [int(float(f.readline())) for _ in range(3)]
             # print(time_interval)
             # print(read_duration)
             # print(executions)
@@ -49,7 +53,6 @@ def time_keeper():
         is_timekeeping = True
         n = 0
         while n < executions and is_timekeeping == True:
-            # time.sleep(time_interval)
             countdown(time_interval)
             print("reading")
             # read_state = "reading"
@@ -72,13 +75,12 @@ def experiment_state_check():
     later to be changed with kill pid from the gui
     
     """
-    # count = 0
     while experiment_state != "killed":
         with open(settings.FILE_EXPERIMENT_STATE, 'r') as f:
             experiment_state = f.read()
-        print(experiment_state)
-        time.sleep(2)
-        # count+=1
+        # print(experiment_state)
+        time.sleep(0.5)
+
         
         if experiment_state == "stop":
             is_timekeeping = False
