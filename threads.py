@@ -3,6 +3,7 @@ import csv
 import time
 import serial
 import settings
+from communicate import TellGUI
 
 experiment_state = ""
 read_state =""
@@ -24,7 +25,7 @@ TODO:
 - time_keeper thread
 - change read_state for data_write()
 - handling if arduino not detected
-- handling for time keeper if killed (maybe it indeed needs to be killed)
+- change all the strings to settings.SOMETHING
 
 
 
@@ -63,18 +64,14 @@ def time_keeper():
             
             n+=1
             
+            TellGUI.experiment_count(n)
+            
     is_timekeeping = False
         
 
 def experiment_state_check():
     global experiment_state, is_timekeeping
-    
-    """
-    
-    use count for the time being,
-    later to be changed with kill pid from the gui
-    
-    """
+
     while experiment_state != "killed":
         with open(settings.FILE_EXPERIMENT_STATE, 'r') as f:
             experiment_state = f.read()
@@ -89,27 +86,29 @@ def experiment_state_check():
             th = threading.Thread(target=time_keeper)
             th.start()
             
+    is_timekeeping = False
+            
 
-# def data_write():
-#     global read_state, count
+def data_write():
+    global read_state, count
     
-#     count += 1
-#     file = open(f"input{count}.csv", 'w', newline='')
-#     write = csv.writer(file)
+    count += 1
+    file = open(f"input{count}.csv", 'w', newline='')
+    write = csv.writer(file)
 
-#     while read_state == "read":
-#         line = ser_sensor.readline()
+    while read_state == "reading":
+        line = ser_sensor.readline()
         
-#         try:
-#             num = int(line.decode())
-#         except:
-#             pass
+        try:
+            num = int(line.decode())
+        except:
+            pass
         
-#         string = str(num)
-#         write.writerow([string])
-#         time.sleep(1)
+        string = str(num)
+        write.writerow([string])
+        time.sleep(1)
 
-#     file.close()
+    file.close()
 
 def main():
     th = threading.Thread(target=experiment_state_check)

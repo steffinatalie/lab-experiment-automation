@@ -10,6 +10,7 @@ display reading countdown
 create serial monitor
 create experiment time estimation
 create warning before closing window during experiment
+what if you 'modularized' all the write and read ahshahs
 
 
 when window destroyed, kill the other process, but make sure all the files are already flushed 

@@ -9,4 +9,9 @@ INPUT_TEXT_HEIGHT = 1
 
 FILE_EXPERIMENT_STATE = "experiment_state.txt"
 FILE_READ_STATE = "read_state.txt"
-FILE_TIME_CONFIG = "time_conf.txt"
+FILE_TIME_CONFIG = "time_config.txt"
+FILE_COUNT_EXPERIMENT = "count_experiment.txt"
+
+START = 1
+STOP = 0
+KILLED = -1
