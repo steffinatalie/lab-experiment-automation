@@ -3,6 +3,7 @@ import csv
 import time
 import serial
 import settings
+import utils
 from communicate_v2 import Communicate as com
 
 experiment_state = None
@@ -14,18 +15,14 @@ is_timekeeping = False
 
 
 """
-Experiment state : start, stop, killed
+Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
 - try the time keeper
 - 'stop' affects all the processes
 - read state should also be sent through serial to the other arduino
-- put the files in folders 'topics' 'readings'
-- time_keeper thread
-- change read_state for data_write()
 - handling if arduino not detected
-- change all the strings to settings.SOMETHING
 
 
 
@@ -97,8 +94,12 @@ def experiment_state_check():
 def data_write():
     global read_state, count
     
+    path = utils.create_path(settings.FOLDER_READINGS)
+    
+    
+    # check the execution of these
     count += 1
-    file = open(f"input{count}.csv", 'w', newline='')
+    file = open(f"{path}\input{count}.csv", 'w', newline='')
     write = csv.writer(file)
 
     while read_state == settings.START:

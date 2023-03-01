@@ -5,7 +5,6 @@ use static method and class variable
 
 class Communicate:
     experiment_state = None
-    # read_state = None
     time_config = []
     count_executions = None
     

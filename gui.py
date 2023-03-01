@@ -2,7 +2,6 @@ from tkinter import *
 import settings
 import utils
 from elements import LeftFrame
-from communicate import PublishToThreads as pub
 from communicate_v2 import Communicate as com
 
 root = Tk()
@@ -15,7 +14,7 @@ left_frame = Frame(
     root,
     # bg = "red",
     width=utils.width_prct(50),
-    height=utils.height_prct(100)
+    height=utils.height_prct(50)
 )
 left_frame.place(x=0, y=0)
 
@@ -33,7 +32,4 @@ lf = LeftFrame(left_frame)
 #run the window 
 root.mainloop()
 
-# print("I'm dead")
-# utils.kill()
-# pub.experiment_state(settings.KILLED)
 com.publish_experiment_state(settings.KILLED)

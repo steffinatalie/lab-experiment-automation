@@ -1,22 +1,20 @@
 from tkinter import Button, Text, Label
 import settings
 import threads
-from communicate import PublishToThreads as pub
-from communicate import GUIUpdate as update
 from communicate_v2 import Communicate as com
 
 """
 TODO:
-display how many executions executed
-create n minutes n seconds left until the next reading
-display reading countdown
-create serial monitor
-create experiment time estimation
-create warning before closing window during experiment
-what if you 'modularized' all the write and read ahshahs
-
-
-when window destroyed, kill the other process, but make sure all the files are already flushed 
+- display how many executions executed
+- create n minutes n seconds left until the next reading
+- display reading countdown
+- create serial monitor
+- create experiment time estimation
+- create warning before closing window during experiment
+- create warning if experiment stopped when sensors are still below the heater
+- create pause and continue
+- make sure all csv flushed before program terminated
+- error input handing
 """
 
 class LeftFrame:
@@ -109,16 +107,6 @@ class LeftFrame:
         )
         
         
-       
-        
-        
-        
-        
-        
-    # create error input handling
-    # create error input handling
-    # create error input handling
-        
         
     def start(self, event):
         self.start_button.config(
@@ -149,9 +137,7 @@ class LeftFrame:
         self.stop_button.config(
             state="disabled"
         )
-        # with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
-        #     f.write("stop")
-        # pub.experiment_state(settings.STOP)
+
         com.publish_experiment_state(settings.STOP)
         
         self.start_button.config(
