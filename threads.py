@@ -3,11 +3,10 @@ import csv
 import time
 import serial
 import settings
-from communicate import PublishToGUI as pub
-from communicate import ThreadsUpdate as update
+from communicate_v2 import Communicate as com
 
-experiment_state = ""
-read_state =""
+experiment_state = None
+read_state = None
 count = 0
 is_timekeeping = False
 # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
@@ -40,53 +39,59 @@ def countdown(n):
             break
         print(n-i)
         time.sleep(0.99)
+        
 
 def time_keeper():
-    global experiment_state, is_timekeeping #read_state
+    global experiment_state, is_timekeeping, read_state
     
-    if experiment_state == "start":
-        with open(settings.FILE_TIME_CONFIG, 'r') as f:   
-            time_interval, read_duration, executions = [int(float(f.readline())) for _ in range(3)]
-            # print(time_interval)
-            # print(read_duration)
-            # print(executions)
+    if experiment_state == settings.START:
+        time_interval, read_duration, executions = [int(float(x)) for x in com.update_time_config()]
+    
             
         time_interval *= 5 #later to be changed to 60
-        is_timekeeping = True
         n = 0
         while n < executions and is_timekeeping == True:
+            read_state = settings.START
             countdown(time_interval)
-            print("reading")
-            # read_state = "reading"
+            # print("reading")
+            # read_state = settings.START
+            
+            th = threading.Thread(target=data_write)
+            th.start()
             
             countdown(read_duration)
-            print("notreading")
-            # read_state = "notreading"
+            # print("notreading")
+            read_state = settings.STOP
             
             n+=1
             
-            pub.experiment_count(n)
+            # pub.experiment_count(n)
+            com.publish_count_executions(n)
             
     is_timekeeping = False
         
 
 def experiment_state_check():
-    global experiment_state, is_timekeeping
+    global experiment_state, is_timekeeping, read_state
 
     while experiment_state != settings.KILLED:
-        experiment_state = update.experiment_state()
-        print(experiment_state)
+        # experiment_state = update.experiment_state()
+        experiment_state = com.update_experiment_state()
+        # print(experiment_state)
         time.sleep(0.5)
 
         
         if experiment_state == settings.STOP:
+            read_state = False
             is_timekeeping = False
+
         
-        # if experiment_state == "start" and not is_timekeeping:
-        #     th = threading.Thread(target=time_keeper)
-        #     th.start()
+        if experiment_state == settings.START and not is_timekeeping:
+            is_timekeeping = True
+            th = threading.Thread(target=time_keeper)
+            th.start()
             
-    # is_timekeeping = False
+    is_timekeeping = False
             
 
 def data_write():
@@ -96,7 +101,8 @@ def data_write():
     file = open(f"input{count}.csv", 'w', newline='')
     write = csv.writer(file)
 
-    while read_state == "reading":
+    while read_state == settings.START:
+        print("is reading\n")
         line = ser_sensor.readline()
         
         try:

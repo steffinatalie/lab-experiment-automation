@@ -14,7 +14,7 @@ FOLDER_TEST = "test"
 FILE_EXPERIMENT_STATE = "\experiment_state.txt"
 FILE_READ_STATE = "\read_state.txt"
 FILE_TIME_CONFIG = "\time_config.txt"
-FILE_COUNT_EXPERIMENT = "\count_executions.txt"
+FILE_COUNT_EXECUTIONS = "\count_executions.txt"
 
 START = '1'
 STOP = '0'

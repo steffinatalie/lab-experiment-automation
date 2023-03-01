@@ -3,6 +3,7 @@ import settings
 import utils
 from elements import LeftFrame
 from communicate import PublishToThreads as pub
+from communicate_v2 import Communicate as com
 
 root = Tk()
 root.title("Experiment Control Station")
@@ -34,4 +35,5 @@ root.mainloop()
 
 # print("I'm dead")
 # utils.kill()
-pub.experiment_state(settings.KILLED)
+# pub.experiment_state(settings.KILLED)
+com.publish_experiment_state(settings.KILLED)

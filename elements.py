@@ -3,6 +3,7 @@ import settings
 import threads
 from communicate import PublishToThreads as pub
 from communicate import GUIUpdate as update
+from communicate_v2 import Communicate as com
 
 """
 TODO:
@@ -21,6 +22,7 @@ when window destroyed, kill the other process, but make sure all the files are a
 class LeftFrame:
     def __init__(self, location):
         self.location = location
+        self.is_running = False
         
         
         self.start_button = Button(
@@ -123,16 +125,16 @@ class LeftFrame:
             state="disabled"
         )
         
-        # with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
-        #     f.write("start")
+
+        com.publish_experiment_state(settings.START)
         
-        pub.experiment_state(settings.START)
+        time_config = [self.input_time_interval.get(1.0, "end-1c") + '\n', 
+                       self.input_read_duration.get(1.0, "end-1c") + '\n',
+                       self.input_executions.get(1.0, "end-1c") + '\n']
         
-        # file_time_config = open(settings.FILE_TIME_CONFIG, 'w')    
-        # file_time_config.write(self.input_time_interval.get(1.0, "end-1c") + '\n')
-        # file_time_config.write(self.input_read_duration.get(1.0, "end-1c") + '\n')
-        # file_time_config.write(self.input_executions.get(1.0, "end-1c") + '\n')
-        # file_time_config.close()
+        com.publish_time_config(time_config)
+        
+        
         
         # run threads.py
         threads.main()
@@ -141,13 +143,16 @@ class LeftFrame:
             state="normal"
         )
         
+        self.is_running = True
+        
     def stop(self, event):
         self.stop_button.config(
             state="disabled"
         )
         # with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
         #     f.write("stop")
-        pub.experiment_state(settings.STOP)
+        # pub.experiment_state(settings.STOP)
+        com.publish_experiment_state(settings.STOP)
         
         self.start_button.config(
             state="normal"
