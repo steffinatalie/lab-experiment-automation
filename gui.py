@@ -2,6 +2,7 @@ from tkinter import *
 import settings
 import utils
 from elements import LeftFrame
+from communicate import PublishToThreads as pub
 
 root = Tk()
 root.title("Experiment Control Station")
@@ -32,4 +33,5 @@ lf = LeftFrame(left_frame)
 root.mainloop()
 
 # print("I'm dead")
-utils.kill()
+# utils.kill()
+pub.experiment_state(settings.KILLED)

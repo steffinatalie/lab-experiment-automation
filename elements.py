@@ -1,6 +1,8 @@
 from tkinter import Button, Text, Label
 import settings
 import threads
+from communicate import PublishToThreads as pub
+from communicate import GUIUpdate as update
 
 """
 TODO:
@@ -121,14 +123,16 @@ class LeftFrame:
             state="disabled"
         )
         
-        with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
-            f.write("start")
+        # with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
+        #     f.write("start")
         
-        file_time_config = open(settings.FILE_TIME_CONFIG, 'w')    
-        file_time_config.write(self.input_time_interval.get(1.0, "end-1c") + '\n')
-        file_time_config.write(self.input_read_duration.get(1.0, "end-1c") + '\n')
-        file_time_config.write(self.input_executions.get(1.0, "end-1c") + '\n')
-        file_time_config.close()
+        pub.experiment_state(settings.START)
+        
+        # file_time_config = open(settings.FILE_TIME_CONFIG, 'w')    
+        # file_time_config.write(self.input_time_interval.get(1.0, "end-1c") + '\n')
+        # file_time_config.write(self.input_read_duration.get(1.0, "end-1c") + '\n')
+        # file_time_config.write(self.input_executions.get(1.0, "end-1c") + '\n')
+        # file_time_config.close()
         
         # run threads.py
         threads.main()
@@ -141,8 +145,10 @@ class LeftFrame:
         self.stop_button.config(
             state="disabled"
         )
-        with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
-            f.write("stop")
+        # with open(settings.FILE_EXPERIMENT_STATE, 'w') as f:
+        #     f.write("stop")
+        pub.experiment_state(settings.STOP)
+        
         self.start_button.config(
             state="normal"
         )

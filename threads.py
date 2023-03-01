@@ -3,7 +3,8 @@ import csv
 import time
 import serial
 import settings
-from communicate import TellGUI
+from communicate import PublishToGUI as pub
+from communicate import ThreadsUpdate as update
 
 experiment_state = ""
 read_state =""
@@ -64,7 +65,7 @@ def time_keeper():
             
             n+=1
             
-            TellGUI.experiment_count(n)
+            pub.experiment_count(n)
             
     is_timekeeping = False
         
@@ -72,21 +73,20 @@ def time_keeper():
 def experiment_state_check():
     global experiment_state, is_timekeeping
 
-    while experiment_state != "killed":
-        with open(settings.FILE_EXPERIMENT_STATE, 'r') as f:
-            experiment_state = f.read()
-        # print(experiment_state)
+    while experiment_state != settings.KILLED:
+        experiment_state = update.experiment_state()
+        print(experiment_state)
         time.sleep(0.5)
 
         
-        if experiment_state == "stop":
+        if experiment_state == settings.STOP:
             is_timekeeping = False
         
-        if experiment_state == "start" and not is_timekeeping:
-            th = threading.Thread(target=time_keeper)
-            th.start()
+        # if experiment_state == "start" and not is_timekeeping:
+        #     th = threading.Thread(target=time_keeper)
+        #     th.start()
             
-    is_timekeeping = False
+    # is_timekeeping = False
             
 
 def data_write():
