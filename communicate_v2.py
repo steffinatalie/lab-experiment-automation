@@ -1,3 +1,5 @@
+import settings
+
 class Communicate:
     experiment_state = None
     time_config = []

@@ -11,21 +11,61 @@ TODO:
 - display reading countdown
 - create serial monitor or graphic ???
 - create experiment time estimation
-- create warning before closing window during experiment
+- create warning before closing window during experiment CAUSE THE THREADS BROO
 - create warning if experiment stopped when sensors are still below the heater
 - create pause and continue
 - make sure all csv flushed before program terminated
 - connect this to discord bot so it would call bang normen during emergency wkwkwwk
 - handling when started without time config
 - save previous time config
-- start button bug after popup might be fixed using thread
+- create experiment log
+- when experiment stopped by real time config, the stop button disabled and start normal
+- perhaps callback can have it's own class...
+- do unfinished thread handling (print something in every threads)
 """
 
-class LeftTopFrame:
-    def __init__(self, root, location):
-        self.root = root
+class LeftMiddleFrame:
+    def __init__(self, location):
         self.location = location
-        self.is_running = False
+        
+        self.section_title = Label(
+            self.location,
+            text="Experiment Status",
+            font='Helvetica 9 bold'
+        )
+        self.section_title.pack()
+        
+        self.label_n = Label(
+            self.location,
+            text = f"Executed :   0 times"
+        )
+        self.label_n.pack()
+        
+        th = threading.Thread(target=self.status_update)
+        th.start()
+
+    def status_update(self):
+        experiment_state = com.update_experiment_state()
+        while experiment_state != settings.KILLED:
+            n = com.update_count_executions()
+            if n == None:
+                n = 0
+            
+            self.label_n["text"] = f"Executed :   {n} times"
+            experiment_state = com.update_experiment_state()
+            
+        print("hey i am dead")
+        
+
+
+
+
+
+
+
+class LeftTopFrame:
+    def __init__(self, location):
+        self.location = location
         
         
         
@@ -164,25 +204,22 @@ class LeftTopFrame:
                 state="normal"
             )
             
-            self.is_running = True
+            # this sometimes can cause error jut because the main loop is closed
+            # before this one is done, but it is fine
+            th = threading.Thread(target=self.experiment_state_callback)
+            th.start()
+
         
         except:
             # pop up
-            # self.error_time_config_popup()
             th = threading.Thread(target=self.error_time_config_popup)
             th.start()
 
         
     def stop(self, event):
-        self.stop_button.config(
-            state="disabled"
-        )
 
         com.publish_experiment_state(settings.STOP)
-        
-        self.start_button.config(
-            state="normal"
-        )
+
         
     def pause(self, event):
         pass
@@ -192,6 +229,25 @@ class LeftTopFrame:
             title="Error",
             message="Invalid time configurations"
         )
+        
+    def experiment_state_callback(self):
+        experiment_state = com.update_experiment_state()
+        
+        while experiment_state == settings.START:
+            experiment_state = com.update_experiment_state()
+        
+        self.start_button.config(
+            state="normal"
+        )
+        self.stop_button.config(
+            state="disabled"
+        )
+        
+        
+        
+        
+
+        
         
         
         

@@ -10,7 +10,7 @@ experiment_state = None
 read_state = None
 count = 0
 is_timekeeping = False
-# ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+ser_sensor = serial.Serial("COM4", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
 
 
@@ -37,16 +37,21 @@ def countdown(n):
             break
         print(n-i)
         time.sleep(0.99)
+    
         
 
 def time_keeper():
     global experiment_state, is_timekeeping, read_state
     
+    # print(f"Experiment state: {experiment_state}")
+    experiment_state = com.update_experiment_state()
+    
     if experiment_state == settings.START:
         time_interval, read_duration, executions = [x for x in com.update_time_config()]
+        
     
             
-        time_interval *= 5 #later to be changed to 60
+        time_interval *= 2 #later to be changed to 60
         n = 0
         while n < executions and is_timekeeping == True:
             read_state = settings.START
@@ -57,12 +62,16 @@ def time_keeper():
             
             countdown(read_duration)
             read_state = settings.STOP
+            th.join()
             
             n+=1
+            print(f"n : {n}")
+            
 
             com.publish_count_executions(n)
             
     is_timekeeping = False
+    com.publish_experiment_state(settings.STOP)
         
 
 def experiment_state_check():
@@ -70,7 +79,6 @@ def experiment_state_check():
 
     while experiment_state != settings.KILLED:
         experiment_state = com.update_experiment_state()
-        # print(experiment_state)
         time.sleep(0.5)
 
         
