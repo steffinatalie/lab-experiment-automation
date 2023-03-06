@@ -1,7 +1,3 @@
-"""
-you might don't even need a class at all 
-"""
-
 class Communicate:
     experiment_state = None
     time_config = []

@@ -42,7 +42,7 @@ def time_keeper():
     global experiment_state, is_timekeeping, read_state
     
     if experiment_state == settings.START:
-        time_interval, read_duration, executions = [int(float(x)) for x in com.update_time_config()]
+        time_interval, read_duration, executions = [x for x in com.update_time_config()]
         """move the int float to the function, use try except to handle ''
         """
     

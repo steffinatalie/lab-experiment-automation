@@ -1,4 +1,4 @@
-from tkinter import Button, Text, Label
+from tkinter import Button, Text, Label, messagebox
 import settings
 import threads
 from communicate_v2 import Communicate as com
@@ -16,10 +16,14 @@ TODO:
 - make sure all csv flushed before program terminated
 - error input handing
 - connect this to discord bot so it would call bang normen during emergency wkwkwwk
+- handling when started without time config
+- save previous time config
+- pop up window when start pressed for making sure about experiment configurations
 """
 
 class LeftFrame:
-    def __init__(self, location):
+    def __init__(self, root, location):
+        self.root = root
         self.location = location
         self.is_running = False
         
@@ -140,29 +144,32 @@ class LeftFrame:
         
         
     def start(self, event):
-        self.start_button.config(
-            state="disabled"
-        )
         
-
-        com.publish_experiment_state(settings.START)
+        try:
         
-        time_config = [self.input_time_interval.get(1.0, "end-1c") + '\n', 
-                       self.input_read_duration.get(1.0, "end-1c") + '\n',
-                       self.input_executions.get(1.0, "end-1c") + '\n']
+            time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
+                        int(float(self.input_read_duration.get(1.0, "end-1c"))),
+                        int(float(self.input_executions.get(1.0, "end-1c")))]
         
-        com.publish_time_config(time_config)
+            com.publish_experiment_state(settings.START)
+            com.publish_time_config(time_config)
+            
+            # run threads.py
+            threads.main()
+            
+            self.start_button.config(
+                state="disabled"
+            )
+            
+            self.stop_button.config(
+                state="normal"
+            )
+            
+            self.is_running = True
         
-        
-        
-        # run threads.py
-        threads.main()
-        
-        self.stop_button.config(
-            state="normal"
-        )
-        
-        self.is_running = True
+        except:
+            # pop up
+            self.root.after(3000, self.empty_time_config_popup())
         
     def stop(self, event):
         self.stop_button.config(
@@ -177,4 +184,10 @@ class LeftFrame:
         
     def pause(self, event):
         pass
+        
+    def empty_time_config_popup(self):
+        messagebox.showerror(
+            title="Error",
+            message="Empty time configurations"
+        )
         
