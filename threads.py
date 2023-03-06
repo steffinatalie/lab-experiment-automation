@@ -15,7 +15,7 @@ is_timekeeping = False
 
 
 """
-Experiment state : start, stop, killed, paused
+Experiment state : start, stop, killed, paused 
 Read state       : reading, notreading
 
 TODO:
@@ -43,6 +43,8 @@ def time_keeper():
     
     if experiment_state == settings.START:
         time_interval, read_duration, executions = [int(float(x)) for x in com.update_time_config()]
+        """move the int float to the function, use try except to handle ''
+        """
     
             
         time_interval *= 5 #later to be changed to 60
@@ -50,19 +52,15 @@ def time_keeper():
         while n < executions and is_timekeeping == True:
             read_state = settings.START
             countdown(time_interval)
-            # print("reading")
-            # read_state = settings.START
             
             th = threading.Thread(target=data_write)
             th.start()
             
             countdown(read_duration)
-            # print("notreading")
             read_state = settings.STOP
             
             n+=1
-            
-            # pub.experiment_count(n)
+
             com.publish_count_executions(n)
             
     is_timekeeping = False
@@ -72,7 +70,6 @@ def experiment_state_check():
     global experiment_state, is_timekeeping, read_state
 
     while experiment_state != settings.KILLED:
-        # experiment_state = update.experiment_state()
         experiment_state = com.update_experiment_state()
         # print(experiment_state)
         time.sleep(0.5)

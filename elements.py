@@ -15,6 +15,7 @@ TODO:
 - create pause and continue
 - make sure all csv flushed before program terminated
 - error input handing
+- connect this to discord bot so it would call bang normen during emergency wkwkwwk
 """
 
 class LeftFrame:
@@ -23,6 +24,8 @@ class LeftFrame:
         self.is_running = False
         
         
+        
+        # START BUTTON
         self.start_button = Button(
             self.location,
             width=settings.BUTTON_WIDTH,
@@ -38,21 +41,49 @@ class LeftFrame:
         self.start_button.bind("<Button-1>", self.start)
         
         
+        
+        # STOP BUTTON
         self.stop_button = Button(
             self.location,
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT,
         )
         self.stop_button.grid(
-            column=0, row=1
+            column=0, row=2
         )
         self.stop_button.configure(
             text="Stop"
+        )
+        self.stop_button.config(
+            state="disabled"
         )
         # bind
         self.stop_button.bind("<Button-1>", self.stop)
         
         
+        
+        
+        # PAUSE BUTTON
+        self.pause_button = Button(
+            self.location,
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT,
+        )
+        self.pause_button.grid(
+            column=0, row=1
+        )
+        self.pause_button.configure(
+            text="Pause"
+        )
+        self.pause_button.config(
+            state="disabled"
+        )
+        #bind
+        self.pause_button.bind("<Button-1>", self.pause)
+        
+        
+        
+        # TIME CONFIGS
         self.label_time_interval = Label(
             self.location,
             text="Time Interval (m)  "
@@ -144,4 +175,6 @@ class LeftFrame:
             state="normal"
         )
         
+    def pause(self, event):
+        pass
         

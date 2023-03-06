@@ -1,6 +1,5 @@
 """
-use static method and class variable
-
+you might don't even need a class at all 
 """
 
 class Communicate:
