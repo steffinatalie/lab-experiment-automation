@@ -1,7 +1,7 @@
 from tkinter import *
 import settings
 import utils
-from elements import LeftFrame
+from elements import LeftTopFrame
 from communicate_v2 import Communicate as com
 
 root = Tk()
@@ -27,7 +27,7 @@ right_frame = Frame(
 right_frame.place(x=utils.width_prct(50), y=0)
 
 #frames
-lf = LeftFrame(root, left_top_frame)
+lf = LeftTopFrame(root, left_top_frame)
 
 #run the window 
 root.mainloop()

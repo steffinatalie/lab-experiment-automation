@@ -21,7 +21,7 @@ TODO:
 - pop up window when start pressed for making sure about experiment configurations
 """
 
-class LeftFrame:
+class LeftTopFrame:
     def __init__(self, root, location):
         self.root = root
         self.location = location
@@ -169,7 +169,8 @@ class LeftFrame:
         
         except:
             # pop up
-            self.root.after(3000, self.empty_time_config_popup())
+            self.empty_time_config_popup()
+            
         
     def stop(self, event):
         self.stop_button.config(
@@ -190,4 +191,6 @@ class LeftFrame:
             title="Error",
             message="Empty time configurations"
         )
+        
+        
         
