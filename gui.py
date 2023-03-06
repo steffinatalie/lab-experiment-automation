@@ -27,7 +27,7 @@ right_frame = Frame(
 right_frame.place(x=utils.width_prct(50), y=0)
 
 #frames
-lf = LeftTopFrame(root, left_top_frame)
+ltf = LeftTopFrame(root, left_top_frame)
 
 #run the window 
 root.mainloop()

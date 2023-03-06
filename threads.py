@@ -23,6 +23,7 @@ TODO:
 - 'stop' affects all the processes
 - read state should also be sent through serial to the other arduino
 - handling if arduino not detected
+- first thing when main is called is to check availability of arduino
 
 
 
@@ -43,8 +44,6 @@ def time_keeper():
     
     if experiment_state == settings.START:
         time_interval, read_duration, executions = [x for x in com.update_time_config()]
-        """move the int float to the function, use try except to handle ''
-        """
     
             
         time_interval *= 5 #later to be changed to 60

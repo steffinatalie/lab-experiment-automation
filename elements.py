@@ -2,24 +2,23 @@ from tkinter import Button, Text, Label, messagebox
 import settings
 import threads
 from communicate_v2 import Communicate as com
-import time
+import threading
 
 """
 TODO:
 - display how many executions executed
 - create n minutes n seconds left until the next reading
 - display reading countdown
-- create serial monitor
+- create serial monitor or graphic ???
 - create experiment time estimation
 - create warning before closing window during experiment
 - create warning if experiment stopped when sensors are still below the heater
 - create pause and continue
 - make sure all csv flushed before program terminated
-- error input handing
 - connect this to discord bot so it would call bang normen during emergency wkwkwwk
 - handling when started without time config
 - save previous time config
-- pop up window when start pressed for making sure about experiment configurations
+- start button bug after popup might be fixed using thread
 """
 
 class LeftTopFrame:
@@ -145,7 +144,6 @@ class LeftTopFrame:
         
         
     def start(self, event):
-        
         try:
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
@@ -170,7 +168,9 @@ class LeftTopFrame:
         
         except:
             # pop up
-            self.error_time_config_popup()
+            # self.error_time_config_popup()
+            th = threading.Thread(target=self.error_time_config_popup)
+            th.start()
 
         
     def stop(self, event):
@@ -192,7 +192,6 @@ class LeftTopFrame:
             title="Error",
             message="Invalid time configurations"
         )
-        
         
         
         
