@@ -2,6 +2,7 @@ from tkinter import Button, Text, Label, messagebox
 import settings
 import threads
 from communicate_v2 import Communicate as com
+import time
 
 """
 TODO:
@@ -169,8 +170,8 @@ class LeftTopFrame:
         
         except:
             # pop up
-            self.empty_time_config_popup()
-            
+            self.error_time_config_popup()
+
         
     def stop(self, event):
         self.stop_button.config(
@@ -186,11 +187,12 @@ class LeftTopFrame:
     def pause(self, event):
         pass
         
-    def empty_time_config_popup(self):
+    def error_time_config_popup(self):
         messagebox.showerror(
             title="Error",
-            message="Empty time configurations"
+            message="Invalid time configurations"
         )
+        
         
         
         
