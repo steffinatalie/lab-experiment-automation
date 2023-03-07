@@ -3,26 +3,50 @@ import settings
 import threads
 from communicate_v2 import Communicate as com
 import threading
+import os
 
 """
 TODO:
-- display how many executions executed
 - create n minutes n seconds left until the next reading
 - display reading countdown
 - create serial monitor or graphic ???
 - create experiment time estimation
-- create warning before closing window during experiment CAUSE THE THREADS BROO
+- create warning before closing window during experiment (experiment must be stopped first, if not stopped window can't be closed)
 - create warning if experiment stopped when sensors are still below the heater
 - create pause and continue
 - make sure all csv flushed before program terminated
 - connect this to discord bot so it would call bang normen during emergency wkwkwwk
-- handling when started without time config
 - save previous time config
 - create experiment log
-- when experiment stopped by real time config, the stop button disabled and start normal
 - perhaps callback can have it's own class...
-- do unfinished thread handling (print something in every threads)
+- change the way status being written
 """
+
+class LeftBottomFrame:
+    def __init__(self, location):
+        self.location = location
+        
+        self.section_title = Label(
+            self.location,
+            text="Log",
+            font='Helvetica 9 bold',
+            background="white"
+        )
+        self.section_title.grid(column=0, row=0)
+        
+        self.label_test = Label(
+            self.location,
+            text="Nothing is running                                                                                  \n\n\n\n\n\n\n\n\n",
+            background="black",
+            fg="white"    
+        )
+        self.label_test.grid(column=0, row=1, padx=5, pady=5, sticky='w'+'e')
+        
+        
+        
+        
+        
+        
 
 class LeftMiddleFrame:
     def __init__(self, location):
@@ -30,16 +54,28 @@ class LeftMiddleFrame:
         
         self.section_title = Label(
             self.location,
-            text="Experiment Status",
+            text="Status",
             font='Helvetica 9 bold'
         )
-        self.section_title.pack()
+        self.section_title.grid(column=0, row=0, sticky='w')
         
         self.label_n = Label(
             self.location,
-            text = f"Executed :   0 times"
+            text = f"Executed               :   0 times"
         )
-        self.label_n.pack()
+        self.label_n.grid(column=0, row=1, sticky='w')
+        
+        self.label_estimation = Label(
+            self.location,
+            text = f"End time estimation    :          "
+        )
+        self.label_estimation.grid(column=0, row=2, sticky='w')
+        
+        self.label_sensors_position = Label(
+            self.location,
+            text="Sensors position           :          "
+        )
+        self.label_sensors_position.grid(column=0, row=3, sticky='w')
         
         th = threading.Thread(target=self.status_update)
         th.start()
@@ -47,6 +83,7 @@ class LeftMiddleFrame:
     def status_update(self):
         experiment_state = com.update_experiment_state()
         while experiment_state != settings.KILLED:
+            # print("status")
             n = com.update_count_executions()
             if n == None:
                 n = 0

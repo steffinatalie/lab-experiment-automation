@@ -10,8 +10,9 @@ experiment_state = None
 read_state = None
 count = 0
 is_timekeeping = False
-ser_sensor = serial.Serial("COM4", 9800, timeout=1)
-# ser_actuator = serial.Serial("COM5", 9800, timeout=1)
+
+ser_sensor = None
+ser_actuator = None
 
 
 """
@@ -19,13 +20,10 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
-- try the time keeper
-- 'stop' affects all the processes
+- stop needs improvement
 - read state should also be sent through serial to the other arduino
 - handling if arduino not detected
 - first thing when main is called is to check availability of arduino
-
-
 
 """
 
@@ -96,7 +94,7 @@ def experiment_state_check():
             
 
 def data_write():
-    global read_state, count
+    global read_state, count, ser_sensor, ser_actuator
     
     path = utils.create_path(settings.FOLDER_READINGS)
     
@@ -122,6 +120,11 @@ def data_write():
     file.close()
 
 def main():
+    global ser_sensor, ser_actuator
+    
+    ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+    # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
+    
     th = threading.Thread(target=experiment_state_check)
     th.start()
     
