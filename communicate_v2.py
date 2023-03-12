@@ -4,6 +4,13 @@ class Communicate:
     experiment_state = None
     time_config = []
     count_executions = None
+    arduino_state = None
+    
+    # PUBLISHES
+    
+    @staticmethod
+    def publish_arduino_state(state):
+        Communicate.arduino_state = state
     
     @staticmethod
     def publish_experiment_state(state):
@@ -16,6 +23,14 @@ class Communicate:
     @staticmethod
     def publish_count_executions(count):
         Communicate.count_executions = count
+        
+        
+        
+    # UPDATES
+    
+    @staticmethod
+    def update_arduino_state():
+        return Communicate.arduino_state
     
     @staticmethod
     def update_experiment_state():

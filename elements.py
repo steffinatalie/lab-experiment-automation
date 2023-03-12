@@ -7,6 +7,7 @@ import os
 
 """
 TODO:
+- try daemon thread
 - create n minutes n seconds left until the next reading
 - display reading countdown
 - create serial monitor or graphic ???
@@ -59,39 +60,43 @@ class LeftMiddleFrame:
         )
         self.section_title.grid(column=0, row=0, sticky='w')
         
-        self.label_n = Label(
+        self. = Label(
             self.location,
-            text = f"Executed               :   0 times"
+            text=""
         )
-        self.label_n.grid(column=0, row=1, sticky='w')
+    #     self.label_n = Label(
+    #         self.location,
+    #         text = f"Executed               :   0 times"
+    #     )
+    #     self.label_n.grid(column=0, row=1, sticky='w')
         
-        self.label_estimation = Label(
-            self.location,
-            text = f"End time estimation    :          "
-        )
-        self.label_estimation.grid(column=0, row=2, sticky='w')
+    #     self.label_estimation = Label(
+    #         self.location,
+    #         text = f"End time estimation    :          "
+    #     )
+    #     self.label_estimation.grid(column=0, row=2, sticky='w')
         
-        self.label_sensors_position = Label(
-            self.location,
-            text="Sensors position           :          "
-        )
-        self.label_sensors_position.grid(column=0, row=3, sticky='w')
+    #     self.label_sensors_position = Label(
+    #         self.location,
+    #         text="Sensors position           :          "
+    #     )
+    #     self.label_sensors_position.grid(column=0, row=3, sticky='w')
         
-        th = threading.Thread(target=self.status_update)
-        th.start()
+    #     th = threading.Thread(target=self.status_update)
+    #     th.start()
 
-    def status_update(self):
-        experiment_state = com.update_experiment_state()
-        while experiment_state != settings.KILLED:
-            # print("status")
-            n = com.update_count_executions()
-            if n == None:
-                n = 0
+    # def status_update(self):
+    #     experiment_state = com.update_experiment_state()
+    #     while experiment_state != settings.KILLED:
+    #         # print("status")
+    #         n = com.update_count_executions()
+    #         if n == None:
+    #             n = 0
             
-            self.label_n["text"] = f"Executed :   {n} times"
-            experiment_state = com.update_experiment_state()
+    #         self.label_n["text"] = f"Executed :   {n} times"
+    #         experiment_state = com.update_experiment_state()
             
-        print("hey i am dead")
+    #     print("hey i am dead")
         
 
 
@@ -221,6 +226,9 @@ class LeftTopFrame:
         
         
     def start(self, event):
+        
+        # thr = threading.Thread(target=)
+        
         try:
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 

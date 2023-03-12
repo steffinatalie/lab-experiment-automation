@@ -118,12 +118,40 @@ def data_write():
         time.sleep(1)
 
     file.close()
+    
+def move_forward():
+    global ser_actuator
+    
+    # ser_actuator.write(bytes(settings.START, "utf-8"))
+    time.sleep(0.05)
+    
+
+def idle():
+    global ser_actuator
+    
+    # ser_actuator.write(bytes(settings.KILLED, "utf-8"))
+    time.sleep(0.05)
+
+def move_backward():
+    global ser_actuator
+    
+    # ser_actuator.write(bytes(settings.STOP, "utf-8"))
+    time.sleep(0.05)
+    
+"""
+create new settings.ACTUATOR LALALA
+
+"""
+
+def actuator_state_check():
+    # while 
+    pass
 
 def main():
     global ser_sensor, ser_actuator
     
     ser_sensor = serial.Serial("COM4", 9800, timeout=1)
-    # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
+    ser_actuator = serial.Serial("COM5", 9800, timeout=1)
     
     th = threading.Thread(target=experiment_state_check)
     th.start()
