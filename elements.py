@@ -60,10 +60,10 @@ class LeftMiddleFrame:
         )
         self.section_title.grid(column=0, row=0, sticky='w')
         
-        self. = Label(
-            self.location,
-            text=""
-        )
+        # self. = Label(
+        #     self.location,
+        #     text=""
+        # )
     #     self.label_n = Label(
     #         self.location,
     #         text = f"Executed               :   0 times"
@@ -251,8 +251,8 @@ class LeftTopFrame:
             
             # this sometimes can cause error jut because the main loop is closed
             # before this one is done, but it is fine
-            th = threading.Thread(target=self.experiment_state_callback)
-            th.start()
+            # th = threading.Thread(target=self.experiment_state_callback)
+            # th.start()
 
         
         except:
@@ -264,6 +264,14 @@ class LeftTopFrame:
     def stop(self, event):
 
         com.publish_experiment_state(settings.STOP)
+        
+        self.start_button.config(
+                state="normal"
+            )
+            
+        self.stop_button.config(
+            state="disabled"
+        )
 
         
     def pause(self, event):

@@ -68,4 +68,4 @@ ltf = LeftTopFrame(left_top_frame)
 #run the window 
 root.mainloop()
 
-# com.publish_experiment_state(settings.KILLED)
+com.publish_experiment_state(settings.KILLED)
