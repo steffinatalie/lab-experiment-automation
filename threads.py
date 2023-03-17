@@ -14,7 +14,7 @@ is_timekeeping = False
 ser_sensor = None
 ser_actuator = None
 
-ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+ser_sensor = serial.Serial("COM8", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
 
 
@@ -52,7 +52,7 @@ def time_keeper():
         
     
             
-        time_interval *= 60 #later to be changed to 60
+        time_interval *= 3 #later to be changed to 60
         n = 0
         while n < executions and is_timekeeping == True:
             read_state = settings.START
@@ -103,24 +103,24 @@ def data_write():
     
     
     # check the execution of these
-    # count += 1
-    # file = open(f"{path}\input{count}.csv", 'w', newline='')
-    # write = csv.writer(file)
+    count += 1
+    file = open(f"{path}\input{count}.csv", 'w', newline='')
+    write = csv.writer(file)
 
     while read_state == settings.START:
         print("is reading\n")
-    #     line = ser_sensor.readline()
+        line = ser_sensor.readline()
         
-    #     try:
-    #         num = int(line.decode())
-    #     except:
-    #         pass
+        try:
+            num = float(line.decode())
+        except:
+            pass
         
-    #     string = str(num)
-    #     write.writerow([string])
+        string = str(num)
+        write.writerow([string])
         time.sleep(1)
 
-    # file.close()
+    file.close()
     
 def move_forward():
     global ser_actuator
