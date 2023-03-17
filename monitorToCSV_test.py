@@ -2,13 +2,14 @@ import csv
 import pandas as pd
 import serial
 
-"""- maybe try to print line.decode()
+"""- throw the empty values
 """
 
 # str = "100.70, 77.77"
 ser = serial.Serial("COM6", 9800, timeout=1)
 line = ser.readline()
-while(line == ''):
+
+while(line.decode() == ''):
     line = ser.readline()
 
 f = float(line.decode())

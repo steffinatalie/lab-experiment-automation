@@ -14,8 +14,8 @@ is_timekeeping = False
 ser_sensor = None
 ser_actuator = None
 
-ser_sensor = serial.Serial("COM8", 9800, timeout=1)
-# ser_actuator = serial.Serial("COM5", 9800, timeout=1)
+ser_sensor = serial.Serial("COM6", 9800, timeout=1)
+ser_actuator = serial.Serial("COM8", 9800, timeout=1)
 
 
 """
@@ -56,6 +56,12 @@ def time_keeper():
         n = 0
         while n < executions and is_timekeeping == True:
             read_state = settings.START
+            """tell the actuator to move forward and wait untill it arrives"""
+            move_forward()
+            
+            """actuator idle"""
+            idle()
+            
             countdown(time_interval)
             
             th = threading.Thread(target=data_write)
@@ -64,6 +70,12 @@ def time_keeper():
             countdown(read_duration)
             read_state = settings.STOP
             th.join()
+            
+            """tell the actuator to go back and wait untill it arrives"""
+            move_backward()
+            
+            """actuator idle"""
+            idle()
             
             n+=1
             print(f"n : {n}")
@@ -123,22 +135,16 @@ def data_write():
     file.close()
     
 def move_forward():
-    global ser_actuator
-    
-    # ser_actuator.write(bytes(settings.START, "utf-8"))
+    ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
     time.sleep(0.05)
     
 
 def idle():
-    global ser_actuator
-    
-    # ser_actuator.write(bytes(settings.KILLED, "utf-8"))
+    ser_actuator.write(bytes(settings.IDLE, "utf-8"))
     time.sleep(0.05)
 
 def move_backward():
-    global ser_actuator
-    
-    # ser_actuator.write(bytes(settings.STOP, "utf-8"))
+    ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
     time.sleep(0.05)
     
 """
@@ -146,15 +152,12 @@ create new settings.ACTUATOR LALALA
 
 """
 
-def actuator_state_check():
-    # while 
-    pass
+# def actuator_state_check():
+#     # while 
+#     pass
 
 def main():
-    # global ser_sensor, ser_actuator
-    
-    # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
-    # ser_actuator = serial.Serial("COM5", 9800, timeout=1)
+
     
     th = threading.Thread(target=experiment_state_check)
     th.start()
