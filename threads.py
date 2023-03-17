@@ -14,8 +14,8 @@ is_timekeeping = False
 ser_sensor = None
 ser_actuator = None
 
-ser_sensor = serial.Serial("COM6", 9800, timeout=1)
-ser_actuator = serial.Serial("COM8", 9800, timeout=1)
+# ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+ser_actuator = serial.Serial("COM6", 9800, timeout=1)
 
 
 """
@@ -42,6 +42,9 @@ def countdown(n):
         
 
 def time_keeper():
+    print("begin time keeping")
+    t = threading.Thread(target=actuator_check)
+    t.start()
     global experiment_state, is_timekeeping, read_state
     
     # print(f"Experiment state: {experiment_state}")
@@ -56,6 +59,8 @@ def time_keeper():
         n = 0
         while n < executions and is_timekeeping == True:
             read_state = settings.START
+            countdown(time_interval)
+
             """tell the actuator to move forward and wait untill it arrives"""
             move_forward()
             
@@ -96,6 +101,7 @@ def experiment_state_check():
 
         
         if experiment_state == settings.STOP:
+            idle()
             read_state = False
             is_timekeeping = False
 
@@ -111,41 +117,46 @@ def experiment_state_check():
 def data_write():
     global read_state, count, ser_sensor, ser_actuator
     
-    path = utils.create_path(settings.FOLDER_READINGS)
+    # path = utils.create_path(settings.FOLDER_READINGS)
     
     
     # check the execution of these
-    count += 1
-    file = open(f"{path}\input{count}.csv", 'w', newline='')
-    write = csv.writer(file)
+    # count += 1
+    # file = open(f"{path}\input{count}.csv", 'w', newline='')
+    # write = csv.writer(file)
 
     while read_state == settings.START:
         print("is reading\n")
-        line = ser_sensor.readline()
+    #     line = ser_sensor.readline()
         
-        try:
-            num = float(line.decode())
-        except:
-            pass
+    #     try:
+    #         num = float(line.decode())
+    #     except:
+    #         pass
         
-        string = str(num)
-        write.writerow([string])
+    #     string = str(num)
+    #     write.writerow([string])
         time.sleep(1)
 
-    file.close()
+    # file.close()
     
 def move_forward():
     ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-    time.sleep(0.05)
+    countdown(27)
     
 
 def idle():
     ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-    time.sleep(0.05)
+    countdown(2)
 
 def move_backward():
     ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-    time.sleep(0.05)
+    countdown(27)
+
+def actuator_check():
+    read = ser_actuator.readline()
+    line = read.decode()
+    print(str(line))
     
 """
 create new settings.ACTUATOR LALALA

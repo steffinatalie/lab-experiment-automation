@@ -13,6 +13,6 @@ START = 1
 STOP = 0
 KILLED = -1
 
-FORWARD = '1'
-IDLE = '2'
-BACKWARD = '3'
+FORWARD = '2'
+IDLE = '3'
+BACKWARD = '4'

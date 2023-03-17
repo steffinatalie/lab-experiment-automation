@@ -7,6 +7,7 @@ import os
 
 """
 TODO:
+- button for actuator move backward
 - try daemon thread
 - create n minutes n seconds left until the next reading
 - display reading countdown
