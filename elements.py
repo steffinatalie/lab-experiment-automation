@@ -7,7 +7,8 @@ import os
 
 """
 TODO:
-- button for actuator move backward
+- button for actuator move 
+- widget for changing com port
 - try daemon thread
 - create n minutes n seconds left until the next reading
 - display reading countdown
