@@ -1,9 +1,9 @@
-from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu
+from tkinter import Button, Text, Label, messagebox
 import settings
 import threads
 from communicate_v2 import Communicate as com
 import threading
-import serial.tools.list_ports as port_list
+import os
 
 """
 TODO:
@@ -22,6 +22,86 @@ TODO:
 - save latest time config
 - create experiment log
 """
+
+class LeftBottomFrame:
+    def __init__(self, location):
+        self.location = location
+        
+        self.section_title = Label(
+            self.location,
+            text="Log",
+            font='Helvetica 9 bold',
+            background="white"
+        )
+        self.section_title.grid(column=0, row=0)
+        
+        self.label_test = Label(
+            self.location,
+            text="Nothing is running                                                                                  \n\n\n\n\n\n\n\n\n",
+            background="black",
+            fg="white"    
+        )
+        self.label_test.grid(column=0, row=1, padx=5, pady=5, sticky='w'+'e')
+        
+        
+        
+        
+        
+        
+
+class LeftMiddleFrame:
+    def __init__(self, location):
+        self.location = location
+        
+        self.section_title = Label(
+            self.location,
+            text="Status",
+            font='Helvetica 9 bold'
+        )
+        self.section_title.grid(column=0, row=0, sticky='w')
+        
+        # self. = Label(
+        #     self.location,
+        #     text=""
+        # )
+    #     self.label_n = Label(
+    #         self.location,
+    #         text = f"Executed               :   0 times"
+    #     )
+    #     self.label_n.grid(column=0, row=1, sticky='w')
+        
+    #     self.label_estimation = Label(
+    #         self.location,
+    #         text = f"End time estimation    :          "
+    #     )
+    #     self.label_estimation.grid(column=0, row=2, sticky='w')
+        
+    #     self.label_sensors_position = Label(
+    #         self.location,
+    #         text="Sensors position           :          "
+    #     )
+    #     self.label_sensors_position.grid(column=0, row=3, sticky='w')
+        
+    #     th = threading.Thread(target=self.status_update)
+    #     th.start()
+
+    # def status_update(self):
+    #     experiment_state = com.update_experiment_state()
+    #     while experiment_state != settings.KILLED:
+    #         # print("status")
+    #         n = com.update_count_executions()
+    #         if n == None:
+    #             n = 0
+            
+    #         self.label_n["text"] = f"Executed :   {n} times"
+    #         experiment_state = com.update_experiment_state()
+            
+    #     print("hey i am dead")
+        
+
+
+
+
 
 
 
@@ -147,6 +227,7 @@ class LeftTopFrame:
         
     def start(self, event):
         
+        # thr = threading.Thread(target=)
         
         try:
         
@@ -167,7 +248,11 @@ class LeftTopFrame:
             self.stop_button.config(
                 state="normal"
             )
-
+            
+            # this sometimes can cause error jut because the main loop is closed
+            # before this one is done, but it is fine
+            # th = threading.Thread(target=self.experiment_state_callback)
+            # th.start()
 
         
         except:
@@ -188,7 +273,8 @@ class LeftTopFrame:
             state="disabled"
         )
 
-    def pause():
+        
+    def pause(self, event):
         pass
         
     def error_time_config_popup(self):
@@ -211,35 +297,6 @@ class LeftTopFrame:
         )
         
         
-class LeftBottomFrame:
-    def __init__(self, location):
-        self.location = location
-        
-        self.port_variable = StringVar()
-        self.port_variable.set("PORT")
-        
-        
-        self.port_option_menu = OptionMenu(self.location, self.port_variable, self.get_serial_ports)
-        self.port_option_menu.pack()
-        
-        
-        self.apply_button = Button(self.location, 
-                                   text="Apply", 
-                                   command=self.apply_port, 
-                                   width=settings.BUTTON_WIDTH,
-                                   height=settings.BUTTON_HEIGHT,)
-        self.apply_button.pack()
-        
-    @property
-    def get_serial_ports(self):
-        ports = []
-        for port in port_list.comports():
-            ports.append(port.device)
-            print(port)
-        return ports
-        
-    def apply_port(self):
-        pass
         
         
 

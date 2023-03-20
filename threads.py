@@ -1,5 +1,4 @@
 import threading
-import csv
 import time
 import serial
 import settings
@@ -16,9 +15,8 @@ is_timekeeping = False
 ser_sensor = None
 ser_actuator = None
 
-# ser_sensor = serial.Serial("COM4", 9800, timeout=1)
-ser_actuator = serial.Serial("COM4", 9800, timeout=1)
-
+# ser_sensor = serial.Serial("COM6", 9800, timeout=1)
+# ser_actuator = serial.Serial("COM4", 9800, timeout=1)
 
 """
 Experiment state : start, stop, killed, paused 
@@ -121,12 +119,6 @@ def experiment_state_check():
 
         
         if experiment_state == settings.START and not is_timekeeping:
-                    
-            """
-            halt gui until the sensors have arrived 
-            
-            """
-            
             
             is_timekeeping = True
             th = threading.Thread(target=time_keeper)
@@ -142,6 +134,10 @@ def data_write():
     
     path = utils.create_path(settings.FOLDER_READINGS)
     
+    """
+    check if file already exist
+    
+    """
     
     count += 1
     filename = f"{path}\input{count}.xlsx"
@@ -177,43 +173,28 @@ def data_write():
     with pd.ExcelWriter(filename) as writer:
         df.to_excel(writer, sheet_name="Sheet1", index=False)
 
-"""
-tambahin while supaya bisa di stop midway
-"""   
-        
         
 def move_forward():
     print("FORWARD")
     ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-    countdown(settings.PUSH)
+    countdown(settings.PUSH_DURATION)
     
 
 def idle():
     print("IDLE")
     ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-    countdown(2)
+    countdown(settings.IDLE_SEND_DURATION)
 
 def move_backward():
     print("BACKWARD")
     ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-    countdown(settings.PULL)
+    countdown(settings.PULL_DURATION)
 
-# def actuator_check():
-#     read = ser_actuator.readline()
-#     line = read.decode()
-#     print(str(line))
-    
-"""
-create new settings.ACTUATOR LALALA
 
-"""
-
-# def actuator_state_check():
-#     # while 
-#     pass
+def port_check():
+    pass
 
 def main():
-
     
     th = threading.Thread(target=experiment_state_check)
     th.start()

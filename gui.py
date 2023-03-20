@@ -1,7 +1,7 @@
 from tkinter import *
 import settings
 import utils
-from elements import LeftTopFrame, LeftMiddleFrame, LeftBottomFrame
+from elements import LeftTopFrame, LeftBottomFrame
 from communicate_v2 import Communicate as com
 import time
 import threading
@@ -17,31 +17,27 @@ left_top_frame = Frame(
     root,
     # bg = "red",
     width=utils.width_prct(50),
-    height=utils.height_prct(30),
+    height=utils.height_prct(50),
 )
 left_top_frame.place(x=0, y=0)
 
-left_middle_frame = Frame(
-    root,
-    width=utils.width_prct(50),
-    height=utils.height_prct(30),
-    # highlightbackground="grey",
-    # highlightthickness=2
-)
-left_middle_frame.place(x=0, y=utils.height_prct(30))
+# left_middle_frame = Frame(
+#     root,
+#     width=utils.width_prct(50),
+#     height=utils.height_prct(30),
+#     # highlightbackground="grey",
+#     # highlightthickness=2
+# )
+# left_middle_frame.place(x=0, y=utils.height_prct(30))
 
 left_bottom_frame = Frame(
     root,
     width=utils.width_prct(50),
-    height=utils.height_prct(20),
+    height=utils.height_prct(50),
     # background="white"
 )
 left_bottom_frame.place(x=0, y=utils.height_prct(60))
 
-# terminal = Terminal(
-#     root,
-# )
-# terminal.place(x=0, y=utils.height_prct(60))
 
 
 right_frame = Frame(
@@ -55,7 +51,7 @@ right_frame.place(x=utils.width_prct(50), y=0)
 #frames
 ltf = LeftTopFrame(left_top_frame)
 # lmf = LeftMiddleFrame(left_middle_frame)
-# lbf = LeftBottomFrame(left_bottom_frame)
+lbf = LeftBottomFrame(left_bottom_frame)
 
 
 # def kill():
