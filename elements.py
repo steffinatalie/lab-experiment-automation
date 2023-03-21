@@ -4,9 +4,12 @@ import threads
 from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
+import time
 
 """
 TODO:
+- check the select port using two arduinos
+- check whether port is flipped
 - display count executions
 - button for actuator move 
 - widget for changing com port
@@ -146,9 +149,9 @@ class LeftTopFrame:
         
         
     def start(self, event):
-        
-        
+            
         try:
+            print(com.publish_port_state() + 1)
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -172,8 +175,14 @@ class LeftTopFrame:
         
         except:
             # pop up
-            th = threading.Thread(target=self.error_time_config_popup)
+            
+            th = threading.Thread(target=self.error_popup)
             th.start()
+            
+            
+            
+        
+
 
         
     def stop(self, event):
@@ -190,11 +199,14 @@ class LeftTopFrame:
 
     def pause():
         pass
-        
-    def error_time_config_popup(self):
+
+    def error_popup(self):
+        msg = "Invalid time configurations"
+        if com.update_actuator_port() == None or com.update_sensor_port() == None:
+            msg = "Invalid ports \nand time configurations"
         messagebox.showerror(
             title="Error",
-            message="Invalid time configurations"
+            message=msg
         )
         
     def experiment_state_callback(self):
@@ -214,8 +226,9 @@ class LeftTopFrame:
 class LeftBottomFrame:
     def __init__(self, location):
         self.location = location
-        
-        
+            
+            
+                
         
         
         self.label = Label(self.location, text="Select Port: ", font='Helvetica 10 bold', background="lightgrey")
@@ -223,46 +236,91 @@ class LeftBottomFrame:
             column=0, row=0, columnspan=2, padx=5, pady=10
         )
         
+        self.sensor_label = Label(
+            self.location,
+            text="Sensor:",
+            background="lightgrey"
+        )
+        self.sensor_label.grid(
+            column=0, row=1
+        )
         
+        self.actuator_label = Label(
+            self.location,
+            text="Actuator:",
+            background="lightgrey"
+        )
+        self.actuator_label.grid(
+            column=1, row=1
+        )
         
         
         self.sensor_port_variable = StringVar()
-        self.sensor_port_variable.set("SENS")
+        self.sensor_port_variable.set("None")
         
-        self.sensor_port_option_menu = OptionMenu(self.location, self.sensor_port_variable, self.get_serial_ports)
-        self.sensor_port_option_menu.grid(column=0, row=1, padx=3)
-        
+        self.sensor_port_option_menu = OptionMenu(self.location, self.sensor_port_variable, self.get_ports)
+        self.sensor_port_option_menu.grid(column=0, row=2, padx=3)
         
         
          
         self.actuator_port_variable = StringVar()
-        self.actuator_port_variable.set("ACTU")
+        self.actuator_port_variable.set("None")
         
-        self.actuator_port_option_menu = OptionMenu(self.location, self.actuator_port_variable, self.get_serial_ports)
-        self.actuator_port_option_menu.grid(column=1, row=1, padx=3)
+        self.actuator_port_option_menu = OptionMenu(self.location, self.actuator_port_variable, self.get_ports)
+        self.actuator_port_option_menu.grid(column=1, row=2, padx=3)
         
-        self.apply_button = Button(self.location, 
-                                   text="Apply", 
-                                   command=self.apply_port, 
-                                   width=settings.BUTTON_WIDTH,
-                                   height=settings.BUTTON_HEIGHT,)
-        self.apply_button.grid(column=0, row=2, columnspan=2, padx=5, pady=10)
+        self.apply_button = Button(
+            self.location, 
+            text="Apply", 
+            command=self.apply_port, 
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT,)
+        self.apply_button.grid(column=0, row=3, columnspan=2, padx=5, pady=10)
         
-        # if "COM" in self.sensor_port_variable.get() and "COM" in self.actuator_port_variable.get():
-        #     self.apply_button.config(state="normal")
-        # else:
-        #     self.apply_button.config(state="disabled")
             
-        
-        
+        self.refresh_button = Button(
+            self.location,
+            text="Refresh", 
+            command=self.refresh_port, 
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.refresh_button.grid(column=0, row=4, columnspan=2, padx=5, pady=10)
         
     @property
-    def get_serial_ports(self):
+    def get_ports(self):
         ports = []
+        is_exist = False
         for port in port_list.comports():
+            print("hey")
+            is_exist = True
             ports.append(port.device)
-            print(port)
+            
+        if is_exist == False:
+            ports = ["None"]
+            
         return ports
+    
+    def refresh_port(self):
+        ports = self.get_ports
+        for port in ports:
+            print(port)
+            
+        if ports == ["None"]:
+            self.sensor_port_variable.set("None")
+            self.actuator_port_variable.set("None")
+            
+        menu1 = self.sensor_port_option_menu["menu"]
+        menu2 = self.actuator_port_option_menu["menu"]
+        menu1.delete(0, "end")
+        menu2.delete(0, "end")
+        
+        for port in ports:
+            menu1.add_command(label=port,
+                              command=lambda value=port: self.sensor_port_variable.set(value))
+            menu2.add_command(label=port,
+                              command=lambda value=port: self.sensor_port_variable.set(value))
+        
     
     def apply_port(self):
         sensor_port = self.sensor_port_variable.get()
@@ -286,6 +344,7 @@ class LeftBottomFrame:
         else:
             com.publish_sensor_port(sensor_port)
             com.publish_actuator_port(actuator_port)
+            com.publish_port_state(1)
             print("applied")
         
     

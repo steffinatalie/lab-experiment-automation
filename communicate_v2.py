@@ -5,8 +5,12 @@ class Communicate:
     arduino_state = None
     sensor_port = None
     actuator_port = None
+    port_state = None # 1 or None
     
     # PUBLISHES
+    @staticmethod
+    def publish_port_state(oneOrNone):
+        Communicate.port_state = oneOrNone
     
     @staticmethod
     def publish_sensor_port(port):
@@ -31,6 +35,10 @@ class Communicate:
         
         
     # UPDATES
+    
+    @staticmethod
+    def update_port_state():
+        return Communicate.port_state
     
     @staticmethod
     def update_sensor_port():
