@@ -15,7 +15,7 @@ root.geometry(f"{settings.WINDOW_WIDTH}x{settings.WINDOW_HEIGHT}")
 
 left_top_frame = Frame(
     root,
-    # bg = "red",
+    bg = "white",
     width=utils.width_prct(50),
     height=utils.height_prct(50),
 )

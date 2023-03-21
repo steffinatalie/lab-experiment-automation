@@ -25,7 +25,7 @@ TODO:
 
 
 
-class LeftTopFrame:
+class LeftBottomFrame:
     def __init__(self, location):
         self.location = location
         
@@ -211,24 +211,56 @@ class LeftTopFrame:
         )
         
         
-class LeftBottomFrame:
+class LeftTopFrame:
     def __init__(self, location):
         self.location = location
         
-        self.port_variable = StringVar()
-        self.port_variable.set("PORT")
         
         
-        self.port_option_menu = OptionMenu(self.location, self.port_variable, self.get_serial_ports)
-        self.port_option_menu.pack()
+        
+        self.label = Label(self.location, text="Select Port: ", font='Helvetica 10 bold', background="white")
+        self.label.grid(
+            column=0, row=0, columnspan=2
+        )
         
         
-        self.apply_button = Button(self.location, 
-                                   text="Apply", 
-                                   command=self.apply_port, 
-                                   width=settings.BUTTON_WIDTH,
-                                   height=settings.BUTTON_HEIGHT,)
-        self.apply_button.pack()
+        
+        
+        self.sensor_port_variable = StringVar()
+        self.sensor_port_variable.set("SENS")
+        
+        self.sensor_port_option_menu = OptionMenu(self.location, self.sensor_port_variable, self.get_serial_ports)
+        self.sensor_port_option_menu.grid(column=0, row=1)
+        
+        # self.apply_button = Button(self.location, 
+        #                            text="Apply", 
+        #                            command=self.sensor_apply_port, 
+        #                            width=settings.BUTTON_WIDTH,
+        #                            height=settings.BUTTON_HEIGHT,)
+        # self.apply_button.grid(column=0, row=2)
+        
+        
+        
+        
+        self.actuator_port_variable = StringVar()
+        self.actuator_port_variable.set("ACTU")
+        
+        self.actuator_port_option_menu = OptionMenu(self.location, self.actuator_port_variable, self.get_serial_ports)
+        self.actuator_port_option_menu.grid(column=1, row=1)
+        
+        # self.apply_button = Button(self.location, 
+        #                            text="Apply", 
+        #                            command=self.actuator_apply_port, 
+        #                            width=settings.BUTTON_WIDTH,
+        #                            height=settings.BUTTON_HEIGHT,)
+        # self.apply_button.grid(column=1, row=2)
+        
+        """
+        Publish the selected port when start clicked
+        
+        """
+        
+        
         
     @property
     def get_serial_ports(self):
@@ -238,8 +270,11 @@ class LeftBottomFrame:
             print(port)
         return ports
         
-    def apply_port(self):
-        pass
+    # def sensor_apply_port(self):
+    #     pass
+    
+    # def actuator_apply_port(self):
+    #     pass
         
         
 
