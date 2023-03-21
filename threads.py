@@ -15,6 +15,8 @@ is_timekeeping = False
 ser_sensor = None
 ser_actuator = None
 
+manual_control_state = None
+
 # ser_sensor = serial.Serial("COM6", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM4", 9800, timeout=1)
 
@@ -193,6 +195,48 @@ def move_backward():
 
 def port_check():
     pass
+
+def manual_control_time_keeper():
+    global is_timekeeping, manual_control_state
+    
+    # to check the change of control state
+    # it will interrupt the current time countdown
+    # so it can start another command
+    
+    if manual_control_state != com.update_manual_control_state():
+        is_timekeeping = False
+        
+    # if manual_control_state == settings.KILLED:
+    #     is_timekeeping = False
+    #     idle()
+
+def manual_control_state_check():
+    global manual_control_state, is_timekeeping
+    
+    th = threading.Thread(target=manual_control_time_keeper)
+    th.start()
+    
+    while manual_control_state != settings.KILLED:
+        is_timekeeping = True
+        manual_control_state = com.update_manual_control_state()
+        time.sleep(0.5)
+        
+        if manual_control_state == settings.FORWARD:
+            move_forward()
+            
+        elif manual_control_state == settings.IDLE:
+            idle()
+            
+        elif manual_control_state == settings.BACKWARD:
+            move_backward()
+    
+    is_timekeeping = False
+    idle()
+
+def manual_control():
+    th = threading.Thread(target=manual_control_state_check)
+    th.start()
+    
 
 def main():
     

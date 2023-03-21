@@ -2,12 +2,17 @@ class Communicate:
     experiment_state = None
     time_config = []
     count_executions = None
-    arduino_state = None
     sensor_port = None
     actuator_port = None
     port_state = None # 1 or None
+    manual_control_state = None
     
     # PUBLISHES
+    
+    @staticmethod
+    def publish_manual_control_state(state):
+        Communicate.manual_control_state = state
+    
     @staticmethod
     def publish_port_state(oneOrNone):
         Communicate.port_state = oneOrNone
@@ -35,6 +40,10 @@ class Communicate:
         
         
     # UPDATES
+    
+    @staticmethod
+    def update_manual_control_state():
+        return Communicate.manual_control_state
     
     @staticmethod
     def update_port_state():

@@ -8,6 +8,7 @@ import time
 
 """
 TODO:
+- disable manual when auto
 - check the select port using two arduinos
 - check whether port is flipped
 - display count executions
@@ -353,7 +354,7 @@ class LeftBottomFrame:
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT
         )
-        self.refresh_button.grid(column=0, row=4, columnspan=2, pady=2)
+        self.refresh_button.grid(column=0, row=4, columnspan=2, pady=3)
         
     @property
     def get_ports(self):
