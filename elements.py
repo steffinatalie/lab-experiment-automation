@@ -228,12 +228,58 @@ class LeftBottomFrame:
         self.location = location
             
             
-                
+        self.manual_control_label = Label(
+            self.location,
+            text="MANUAL CONTROL",
+            font='Helvetica 8 bold', 
+            background="lightgrey"
+        )
+        self.manual_control_label.grid(
+            column=2, row = 0, columnspan=2, padx=50, pady=7
+            )
+        
+        self.push_actuator_button = Button(
+            self.location,
+            text="Push", 
+            command=self.push_actuator, 
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.push_actuator_button.grid(
+            column=2, row=1, rowspan=2, padx=10, sticky='n'
+        )
+        
+        self.idle_actuator_button = Button(
+            self.location,
+            text="Idle", 
+            command=self.idle_actuator, 
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.idle_actuator_button.grid(
+            column=2, row=2, rowspan=2, padx=10, pady= 5, sticky='n'
+        )
+        
+        self.pull_actuator_button = Button(
+            self.location,
+            text="Pull", 
+            command=self.pull_actuator, 
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.pull_actuator_button.grid(
+            column=2, row=3, rowspan=2, padx=10, sticky='n'
+        )
         
         
-        self.label = Label(self.location, text="Select Port: ", font='Helvetica 10 bold', background="lightgrey")
-        self.label.grid(
-            column=0, row=0, columnspan=2, padx=5, pady=10
+        
+        self.select_port_label = Label(
+            self.location, 
+            text="SELECT PORT", 
+            font='Helvetica 8 bold', 
+            background="lightgrey")
+        self.select_port_label.grid(
+            column=0, row=0, columnspan=2, padx=40, pady=7
         )
         
         self.sensor_label = Label(
@@ -274,8 +320,8 @@ class LeftBottomFrame:
             text="Apply", 
             command=self.apply_port, 
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT,)
-        self.apply_button.grid(column=0, row=3, columnspan=2, padx=5, pady=10)
+            height=settings.BUTTON_HEIGHT)
+        self.apply_button.grid(column=0, row=3, columnspan=2, pady=2)
         
             
         self.refresh_button = Button(
@@ -285,7 +331,7 @@ class LeftBottomFrame:
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT
         )
-        self.refresh_button.grid(column=0, row=4, columnspan=2, padx=5, pady=10)
+        self.refresh_button.grid(column=0, row=4, columnspan=2, pady=2)
         
     @property
     def get_ports(self):
@@ -371,6 +417,15 @@ class LeftBottomFrame:
             title="Error",
             message="Sensor and actuator port cannot be the same!"
         )
+        
+    def push_actuator(self):
+        pass
+    
+    def pull_actuator(self):
+        pass
+    
+    def idle_actuator(self):
+        pass
         
 
         
