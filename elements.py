@@ -238,6 +238,28 @@ class LeftBottomFrame:
             column=2, row = 0, columnspan=2, padx=50, pady=7
             )
         
+        self.start_read_button = Button(
+            self.location,
+            text="Start Read",
+            command=self.dummy,
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.start_read_button.grid(
+            column=3, row=1, rowspan=2, sticky='n'
+        )
+        
+        self.save_read_button = Button(
+            self.location,
+            text="Save Data",
+            command=self.dummy,
+            width=settings.BUTTON_WIDTH,
+            height=settings.BUTTON_HEIGHT
+        )
+        self.save_read_button.grid(
+            column=3, row=2, rowspan=2, sticky='n', pady= 5
+        )
+        
         self.push_actuator_button = Button(
             self.location,
             text="Push", 
@@ -425,6 +447,9 @@ class LeftBottomFrame:
         pass
     
     def idle_actuator(self):
+        pass
+    
+    def dummy(self):
         pass
         
 
