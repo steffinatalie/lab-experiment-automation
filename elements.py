@@ -25,7 +25,7 @@ TODO:
 
 
 
-class LeftBottomFrame:
+class LeftTopFrame:
     def __init__(self, location):
         self.location = location
         
@@ -211,16 +211,16 @@ class LeftBottomFrame:
         )
         
         
-class LeftTopFrame:
+class LeftBottomFrame:
     def __init__(self, location):
         self.location = location
         
         
         
         
-        self.label = Label(self.location, text="Select Port: ", font='Helvetica 10 bold', background="white")
+        self.label = Label(self.location, text="Select Port: ", font='Helvetica 10 bold', background="lightgrey")
         self.label.grid(
-            column=0, row=0, columnspan=2
+            column=0, row=0, columnspan=2, padx=5, pady=10
         )
         
         
@@ -230,35 +230,29 @@ class LeftTopFrame:
         self.sensor_port_variable.set("SENS")
         
         self.sensor_port_option_menu = OptionMenu(self.location, self.sensor_port_variable, self.get_serial_ports)
-        self.sensor_port_option_menu.grid(column=0, row=1)
-        
-        # self.apply_button = Button(self.location, 
-        #                            text="Apply", 
-        #                            command=self.sensor_apply_port, 
-        #                            width=settings.BUTTON_WIDTH,
-        #                            height=settings.BUTTON_HEIGHT,)
-        # self.apply_button.grid(column=0, row=2)
+        self.sensor_port_option_menu.grid(column=0, row=1, padx=3)
         
         
         
-        
+         
         self.actuator_port_variable = StringVar()
         self.actuator_port_variable.set("ACTU")
         
         self.actuator_port_option_menu = OptionMenu(self.location, self.actuator_port_variable, self.get_serial_ports)
-        self.actuator_port_option_menu.grid(column=1, row=1)
+        self.actuator_port_option_menu.grid(column=1, row=1, padx=3)
         
-        # self.apply_button = Button(self.location, 
-        #                            text="Apply", 
-        #                            command=self.actuator_apply_port, 
-        #                            width=settings.BUTTON_WIDTH,
-        #                            height=settings.BUTTON_HEIGHT,)
-        # self.apply_button.grid(column=1, row=2)
+        self.apply_button = Button(self.location, 
+                                   text="Apply", 
+                                   command=self.apply_port, 
+                                   width=settings.BUTTON_WIDTH,
+                                   height=settings.BUTTON_HEIGHT,)
+        self.apply_button.grid(column=0, row=2, columnspan=2, padx=5, pady=10)
         
-        """
-        Publish the selected port when start clicked
-        
-        """
+        # if "COM" in self.sensor_port_variable.get() and "COM" in self.actuator_port_variable.get():
+        #     self.apply_button.config(state="normal")
+        # else:
+        #     self.apply_button.config(state="disabled")
+            
         
         
         
@@ -269,13 +263,55 @@ class LeftTopFrame:
             ports.append(port.device)
             print(port)
         return ports
-        
-    # def sensor_apply_port(self):
-    #     pass
     
-    # def actuator_apply_port(self):
-    #     pass
+    def apply_port(self):
+        sensor_port = self.sensor_port_variable.get()
+        actuator_port = self.actuator_port_variable.get()
         
+        if "COM" not in sensor_port and "COM" not in actuator_port:
+            self.error_no_port()
+        
+        elif "COM" not in sensor_port: 
+            # popup
+            self.error_not_selected_Sensor_port()
+        
+        elif "COM" not in actuator_port: 
+            # popup
+            self.error_not_selected_Actuator_port()
+
+        elif sensor_port == actuator_port:
+            # popup
+            self.error_same_port()
+        
+        else:
+            com.publish_sensor_port(sensor_port)
+            com.publish_actuator_port(actuator_port)
+            print("applied")
+        
+    
+    def error_no_port(self):
+        messagebox.showerror(
+            title="Error",
+            message="No port selected!"
+        )
+    
+    def error_not_selected_Sensor_port(self):
+        messagebox.showerror(
+            title="Error",
+            message="Sensor port not selected!"
+        )
+        
+    def error_not_selected_Actuator_port(self):
+        messagebox.showerror(
+            title="Error",
+            message="Actuator port not selected!"
+        )
+        
+    def error_same_port(self):
+        messagebox.showerror(
+            title="Error",
+            message="Sensor and actuator port cannot be the same!"
+        )
         
 
         

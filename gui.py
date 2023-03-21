@@ -15,9 +15,10 @@ root.geometry(f"{settings.WINDOW_WIDTH}x{settings.WINDOW_HEIGHT}")
 
 left_top_frame = Frame(
     root,
-    bg = "white",
+    # bg = "white",
     width=utils.width_prct(50),
     height=utils.height_prct(50),
+    
 )
 left_top_frame.place(x=0, y=0)
 
@@ -34,9 +35,11 @@ left_bottom_frame = Frame(
     root,
     width=utils.width_prct(50),
     height=utils.height_prct(50),
-    # background="white"
+    background="lightgrey",
+    # highlightbackground="grey", 
+    # highlightthickness=4
 )
-left_bottom_frame.place(x=0, y=utils.height_prct(60))
+left_bottom_frame.place(relx=0, rely=1.0, anchor='sw')
 
 
 
