@@ -5,64 +5,66 @@ import threading
 
 # --- classes ---
 
-class Redirect():
+def main():
 
-    def __init__(self, widget, autoscroll=True):
-        self.widget = widget
-        self.autoscroll = autoscroll
+    class Redirect():
 
-    def write(self, text):
-        self.widget.insert('end', text)
-        if self.autoscroll:
-            self.widget.see("end")  # autoscroll
-        
-    #def flush(self):
-    #    pass
+        def __init__(self, widget, autoscroll=True):
+            self.widget = widget
+            self.autoscroll = autoscroll
 
-# --- functions ---
+        def write(self, text):
+            self.widget.insert('end', text)
+            if self.autoscroll:
+                self.widget.see("end")  # autoscroll
+            
+        #def flush(self):
+        #    pass
 
-def run():
-    threading.Thread(target=test).start()
+    # --- functions ---
 
-def test():
-    print("Thread: start")
+    def run():
+        threading.Thread(target=test).start()
 
-    p = subprocess.Popen("ping -c 4 stackoverflow.com".split(), stdout=subprocess.PIPE, bufsize=1, text=True)
-    while p.poll() is None:
-        msg = p.stdout.readline().strip() # read a line from the process output
-        if msg:
-            print(msg)
+    def test():
+        print("Thread: start")
 
-    print("Thread: end")
+        p = subprocess.Popen("ping -c 4 stackoverflow.com".split(), stdout=subprocess.PIPE, bufsize=1, text=True)
+        while p.poll() is None:
+            msg = p.stdout.readline().strip() # read a line from the process output
+            if msg:
+                print(msg)
 
-# --- main ---    
+        print("Thread: end")
 
-root = tk.Tk()
+    # --- main ---    
 
-# - Frame with Text and Scrollbar -
+    root = tk.Tk()
 
-frame = tk.Frame(root)
-frame.pack(expand=True, fill='both')
+    # - Frame with Text and Scrollbar -
 
-text = tk.Text(frame)
-text.pack(side='left', fill='both', expand=True)
+    frame = tk.Frame(root)
+    frame.pack(expand=True, fill='both')
 
-scrollbar = tk.Scrollbar(frame)
-scrollbar.pack(side='right', fill='y')
+    text = tk.Text(frame)
+    text.pack(side='left', fill='both', expand=True)
 
-text['yscrollcommand'] = scrollbar.set
-scrollbar['command'] = text.yview
+    scrollbar = tk.Scrollbar(frame)
+    scrollbar.pack(side='right', fill='y')
 
-old_stdout = sys.stdout    
-sys.stdout = Redirect(text)
+    text['yscrollcommand'] = scrollbar.set
+    scrollbar['command'] = text.yview
 
-# - rest -
+    old_stdout = sys.stdout    
+    sys.stdout = Redirect(text)
 
-button = tk.Button(root, text='TEST', command=run)
-button.pack()
+    # - rest -
 
-root.mainloop()
+    button = tk.Button(root, text='TEST', command=run)
+    button.pack()
 
-# - after close window -
+    root.mainloop()
 
-sys.stdout = old_stdout
+    # - after close window -
+
+    sys.stdout = old_stdout

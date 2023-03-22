@@ -4,7 +4,7 @@ import threads
 from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
-import utils
+import terminalToGui_test
 
 """
 TODO:
@@ -92,14 +92,15 @@ class LeftTopFrame:
         self.experiment_log_button = Button(
             self.location,
             text="Experiment Log"
-        ).grid(columnspan=2, column=0, row=8, rowspan= 2, sticky='sw', padx=12, pady=5)
-        
+        )
+        self.experiment_log_button.grid(columnspan=2, column=0, row=8, rowspan= 2, sticky='sw', padx=12, pady=5)
+        self.experiment_log_button.bind("<Button-1>", self.experiment_log_window)
         
         
         
         self.mode_label = Label(
             self.location,
-            text="Mode:                  ",
+            text="Mode :                  ",
             font=("Helvetica", 10)
         )
         self.mode_label.grid(
@@ -317,6 +318,9 @@ class LeftTopFrame:
         self.stop_button.config(
             state="disabled"
         )
+        
+    def experiment_log_window(self, event):
+        terminalToGui_test.main()
         
         
 class LeftBottomFrame:
