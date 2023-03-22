@@ -1,10 +1,22 @@
-from tkinter import Frame, Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, Scrollbar
+from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, Scrollbar
 import settings
 import threads
 from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
+import utils
+
+# testings
 import terminalToGui_test
+
+import tkinter as tk
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+from tkinter import filedialog
+import os
+
 
 """
 TODO:
@@ -26,6 +38,71 @@ TODO:
 - save latest time config
 - create experiment log
 """
+
+
+class RightBottom1Frame:
+    def __init__(self, location):
+        self.location = location
+        
+        self.default_path = utils.create_path(settings.FOLDER_READINGS)
+        
+        self.title_label = Label(
+            self.location,
+            text="OPEN FILES",
+            font='Helvetica 8 bold'
+        ).pack(side='left')
+        
+        self.button = Button(self.location, text="Browse", command=self.browse_files)
+        self.button.pack(side="left")
+
+        self.label = Label(self.location, text="")
+        self.label.pack(side="left")
+        
+    def browse_files(self):
+        file_path = filedialog.askopenfilename(initialdir=self.default_path)
+        if file_path:
+            self.label.config(text=file_path)
+            self.open_file(file_path)
+        
+    def open_file(self, file_path):
+        try:
+            os.startfile(file_path)
+        except AttributeError:
+            try:
+                os.system(f"open {file_path}")
+            except:
+                print("Unable to open file.")
+        
+        
+        
+        
+        
+
+class RightTopFrame:
+    def __init__(self, location):
+        self.location = location
+        
+        """
+        
+        dataframe initiation depends on:
+        the amount of executions
+        but give it a default
+        
+        """
+
+        self.data2 = {'Execution': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+         'Average distance': [9.8, 12, 8, 7.2, 6.9, 7, 6.5, 6.2, 5.5, 6.3, 6.9, 7, 6.5, 6.2, 5.5, 6.3]
+         }  
+        self.df2 = pd.DataFrame(self.data2)
+
+        self.figure2 = plt.Figure(figsize=(7, 6), dpi=70)
+        self.ax2 = self.figure2.add_subplot(111)
+        self.line2 = FigureCanvasTkAgg(self.figure2, self.location)
+        self.line2.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH)
+        self.df2 = self.df2[['Execution', 'Average distance']].groupby('Execution').sum()
+        self.df2.plot(kind='line', legend=True, ax=self.ax2, color='r', marker='o', fontsize=7)
+        self.ax2.set_title('Data Graph')
+
 
 
 
