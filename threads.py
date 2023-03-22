@@ -239,7 +239,6 @@ def manual_control():
     
 
 def main():
-    
     th = threading.Thread(target=experiment_state_check)
     th.start()
     

@@ -1,10 +1,10 @@
-from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu
+from tkinter import Frame, Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, Scrollbar
 import settings
 import threads
 from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
-import time
+import utils
 
 """
 TODO:
@@ -33,19 +33,118 @@ class LeftTopFrame:
     def __init__(self, location):
         self.location = location
         
+        self.executions_count_variable = IntVar()
+        self.executions_count_variable.set(0)
         
+        self.executed_label = Label(
+            self.location,
+            text="Executed (n times)                        :"
+        ).grid(columnspan=2, column=0, row=4, pady=20, padx=10, sticky='sw')
+        
+        self.executions_count_label = Label(
+            self.location,
+            text="",
+            textvariable=self.executions_count_variable
+        ).grid(columnspan=2, column=1, row=4)
+        
+        self.time_left_until_next_execution_variable = IntVar()
+        self.time_left_until_next_execution_variable.set(0)
+        
+        self.countdown_next_execution_label = Label(
+            self.location,
+            text="Countdown next execution (m) :"
+        ).grid(columnspan=2, column=0, row=4, rowspan=2, pady=3, padx=10, sticky='sw')
+        
+        self.time_left_until_next_execution_label = Label(
+            self.location,
+            text="",
+            textvariable=self.time_left_until_next_execution_variable
+        ).grid(columnspan=2, column=1, row=4, rowspan=2, sticky='s')
+        
+        self.actuator_state_variable = StringVar()
+        self.actuator_state_variable.set("IDLE")
+        
+        self.actuator_state_label = Label(
+            self.location,
+            text="Actuator state :"
+        ).grid(columnspan=2, column=0, row=6, pady=20, padx=10, sticky='nw')
+        
+        self.actuator_state_value_label = Label(
+            self.location,
+            text="",
+            textvariable=self.actuator_state_variable
+        ).grid(columnspan=2, column=0, row=6, pady=20, padx=100, sticky='w')
+        
+        self.read_state_variable = StringVar()
+        self.read_state_variable.set("False")
+        
+        self.read_state_label = Label(
+            self.location,
+            text="Read state        :"
+        ).grid(columnspan=2, column=0, row=6, rowspan=2, padx=10, sticky='sw')
+        
+        self.read_state_value_label = Label(
+            self.location,
+            text="",
+            textvariable=self.read_state_variable
+        ).grid(columnspan=2, column=0, row=6, rowspan=2, padx=100, sticky='sw')
+        
+        self.experiment_log_button = Button(
+            self.location,
+            text="Experiment Log"
+        ).grid(columnspan=2, column=0, row=8, rowspan= 2, sticky='sw', padx=12, pady=5)
+        
+        
+        
+        
+        self.mode_label = Label(
+            self.location,
+            text="Mode:                  ",
+            font=("Helvetica", 10)
+        )
+        self.mode_label.grid(
+            column=0, row=10, columnspan=2, sticky='se', pady=40
+        )
+        
+        self.auto_manual_variable = IntVar()
+        self.auto_manual_variable.set(settings.STOP)
+        
+        self.enable_manual_radiobutton = Radiobutton(
+            self.location,
+            text="Manual",
+            variable=self.auto_manual_variable,
+            value=settings.START,
+            indicator=0,
+            width=settings.BUTTON_WIDTH,
+            pady= 5
+        )
+        self.enable_manual_radiobutton.grid(
+            column=1, row=10, sticky='se', pady=40
+        )
+        
+        
+        self.enable_auto_radiobutton = Radiobutton(
+            self.location,
+            text="Auto",
+            variable=self.auto_manual_variable,
+            value=settings.STOP,
+            indicator=0,
+            width=settings.BUTTON_WIDTH,
+            pady= 5
+        )
+        self.enable_auto_radiobutton.grid(
+            column=2, row=10, sticky='se', pady=40
+        )
         
         # START BUTTON
         self.start_button = Button(
             self.location,
+            text="Start",
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT,
         )
         self.start_button.grid(
             column=0, row=0
-        )
-        self.start_button.configure(
-            text="Start"
         )
         #bind
         self.start_button.bind("<Button-1>", self.start)
@@ -55,14 +154,12 @@ class LeftTopFrame:
         # STOP BUTTON
         self.stop_button = Button(
             self.location,
+            text="Stop",
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT,
         )
         self.stop_button.grid(
             column=0, row=2
-        )
-        self.stop_button.configure(
-            text="Stop"
         )
         self.stop_button.config(
             state="disabled"
@@ -76,14 +173,12 @@ class LeftTopFrame:
         # PAUSE BUTTON
         self.pause_button = Button(
             self.location,
+            text="Pause",
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT,
         )
         self.pause_button.grid(
             column=0, row=1
-        )
-        self.pause_button.configure(
-            text="Pause"
         )
         self.pause_button.config(
             state="disabled"
@@ -233,10 +328,10 @@ class LeftBottomFrame:
             self.location,
             text="MANUAL CONTROL",
             font='Helvetica 8 bold', 
-            background="lightgrey"
+            # background="lightgrey"
         )
         self.manual_control_label.grid(
-            column=2, row = 0, columnspan=2, padx=50, pady=7
+            column=2, row = 0, columnspan=2, padx=70, pady=9
             )
         
         self.start_read_button = Button(
@@ -247,7 +342,7 @@ class LeftBottomFrame:
             height=settings.BUTTON_HEIGHT
         )
         self.start_read_button.grid(
-            column=3, row=1, rowspan=2, sticky='n'
+            column=3, row=1, rowspan=2, sticky='nw'
         )
         
         self.save_read_button = Button(
@@ -258,7 +353,7 @@ class LeftBottomFrame:
             height=settings.BUTTON_HEIGHT
         )
         self.save_read_button.grid(
-            column=3, row=2, rowspan=2, sticky='n', pady= 5
+            column=3, row=2, rowspan=2, sticky='nw', pady= 5
         )
         
         self.push_actuator_button = Button(
@@ -269,7 +364,7 @@ class LeftBottomFrame:
             height=settings.BUTTON_HEIGHT
         )
         self.push_actuator_button.grid(
-            column=2, row=1, rowspan=2, padx=10, sticky='n'
+            column=2, row=1, rowspan=2, padx=10, sticky='ne'
         )
         
         self.idle_actuator_button = Button(
@@ -280,7 +375,7 @@ class LeftBottomFrame:
             height=settings.BUTTON_HEIGHT
         )
         self.idle_actuator_button.grid(
-            column=2, row=2, rowspan=2, padx=10, pady= 5, sticky='n'
+            column=2, row=2, rowspan=2, padx=10, pady= 5, sticky='ne'
         )
         
         self.pull_actuator_button = Button(
@@ -291,7 +386,7 @@ class LeftBottomFrame:
             height=settings.BUTTON_HEIGHT
         )
         self.pull_actuator_button.grid(
-            column=2, row=3, rowspan=2, padx=10, sticky='n'
+            column=2, row=3, rowspan=2, padx=10, sticky='ne'
         )
         
         
@@ -300,7 +395,8 @@ class LeftBottomFrame:
             self.location, 
             text="SELECT PORT", 
             font='Helvetica 8 bold', 
-            background="lightgrey")
+            # background="lightgrey"
+            )
         self.select_port_label.grid(
             column=0, row=0, columnspan=2, padx=40, pady=7
         )
@@ -308,7 +404,7 @@ class LeftBottomFrame:
         self.sensor_label = Label(
             self.location,
             text="Sensor:",
-            background="lightgrey"
+            # background="lightgrey"
         )
         self.sensor_label.grid(
             column=0, row=1
@@ -317,7 +413,7 @@ class LeftBottomFrame:
         self.actuator_label = Label(
             self.location,
             text="Actuator:",
-            background="lightgrey"
+            # background="lightgrey"
         )
         self.actuator_label.grid(
             column=1, row=1
@@ -354,7 +450,7 @@ class LeftBottomFrame:
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT
         )
-        self.refresh_button.grid(column=0, row=4, columnspan=2, pady=3)
+        self.refresh_button.grid(column=0, row=4, columnspan=2, pady=5, sticky='n')
         
     @property
     def get_ports(self):

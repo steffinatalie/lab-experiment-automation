@@ -16,6 +16,9 @@ def create_path(folder):
     
     return f"{dir}"
 
+def dummy():
+    pass
+
 # def kill():
 #     com.publish_experiment_state(settings.KILLED)
     

@@ -18,6 +18,7 @@ left_top_frame = Frame(
     # bg = "white",
     width=utils.width_prct(50),
     height=utils.height_prct(50),
+    # background="lightgrey"
     
 )
 left_top_frame.place(x=0, y=0)
@@ -26,7 +27,7 @@ left_top_frame.place(x=0, y=0)
 #     root,
 #     width=utils.width_prct(50),
 #     height=utils.height_prct(30),
-#     # highlightbackground="grey",
+    # highlightbackground="grey",
 #     # highlightthickness=2
 # )
 # left_middle_frame.place(x=0, y=utils.height_prct(30))
@@ -35,7 +36,7 @@ left_bottom_frame = Frame(
     root,
     width=utils.width_prct(50),
     height=utils.height_prct(50),
-    background="lightgrey",
+    # background="lightgrey",
     # highlightbackground="grey", 
     # highlightthickness=4
 )
