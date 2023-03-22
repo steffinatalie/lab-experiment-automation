@@ -1,5 +1,8 @@
+# for testing, don't delete
+import settings
+
 class Communicate:
-    experiment_state = None
+    experiment_state = settings.START
     time_config = []
     count_executions = None
     sensor_port = None

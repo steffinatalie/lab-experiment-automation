@@ -1,10 +1,11 @@
-from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, Scrollbar
+from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, simpledialog
 import settings
 import threads
 from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
 import utils
+import datetime
 
 # testings
 import terminalToGui_test
@@ -16,6 +17,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from tkinter import filedialog
 import os
+
+import time
 
 
 """
@@ -110,6 +113,9 @@ class RightTopFrame:
 class LeftTopFrame:
     def __init__(self, location):
         self.location = location
+        
+        self.input_folder = None
+        self.start_clicked = False
         
         self.executions_count_variable = IntVar()
         self.executions_count_variable.set(0)
@@ -324,7 +330,10 @@ class LeftTopFrame:
         
         
     def start(self, event):
-            
+        self.start_clicked = True
+        th = threading.Thread(target=self.check_start_clicked, daemon=True)
+        th.start()
+        
         try:
             print(com.publish_port_state() + 1)
         
@@ -334,6 +343,8 @@ class LeftTopFrame:
         
             com.publish_experiment_state(settings.START)
             com.publish_time_config(time_config)
+            
+            
             
             # run threads.py
             threads.main()
@@ -346,16 +357,37 @@ class LeftTopFrame:
                 state="normal"
             )
 
-
+            
         
         except:
+            
+            
             # pop up
             
-            th = threading.Thread(target=self.error_popup)
-            th.start()
+            # th = threading.Thread(target=self.error_popup)
+            # th.start()
+            pass
+            
+        self.start_clicked = False
             
             
+    def check_start_clicked(self):
+        # print("hey")
+        while self.start_clicked:
+            print("hey")
+            continue
+        
+        if com.update_experiment_state() == settings.START:
+            self.ask_for_folder_name()
+        
+        
             
+            
+    def ask_for_folder_name(self):
+        default_folder = f"Experiment({datetime.datetime.now()})"
+        self.input_folder = simpledialog.askstring("Input", "Enter data folder name: ", initialvalue=default_folder)
+        print("You entered:", self.input_folder)
+        self.location.after(2500)
         
 
 
