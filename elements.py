@@ -20,6 +20,7 @@ import os
 
 """
 TODO:
+- ask folder name before start the program
 - disable manual when auto
 - check the select port using two arduinos
 - check whether port is flipped

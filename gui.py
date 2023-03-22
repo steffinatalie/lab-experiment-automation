@@ -15,8 +15,7 @@ root.geometry(f"{settings.WINDOW_WIDTH}x{settings.WINDOW_HEIGHT}")
 
 left_top_frame = Frame(
     root,
-    # bg = "white",
-    width=utils.width_prct(50),
+    width=utils.width_prct(45),
     height=utils.height_prct(50),
     # background="lightgrey"
     
@@ -25,7 +24,7 @@ left_top_frame.place(x=0, y=0)
 
 left_bottom_frame = Frame(
     root,
-    width=utils.width_prct(50),
+    width=utils.width_prct(45),
     height=utils.height_prct(50),
 
 )
@@ -35,17 +34,17 @@ left_bottom_frame.place(relx=0, rely=1.0, anchor='sw')
 right_top_frame = Frame(
     root,
     background="white",
-    width=utils.width_prct(50),
+    width=utils.width_prct(55),
     height=utils.height_prct(80)
 )
-right_top_frame.place(x=utils.width_prct(50), y=0)
+right_top_frame.place(x=utils.width_prct(45), y=0)
 
 right_bottom_1_frame = Frame(
     root,
-    width=utils.width_prct(25),
+    width=utils.width_prct(30),
     height=utils.height_prct(20)
 )
-right_bottom_1_frame.place(x=utils.width_prct(50), y=utils.height_prct(80))
+right_bottom_1_frame.place(x=utils.width_prct(45), y=utils.height_prct(80))
 
 # frames
 ltf = LeftTopFrame(left_top_frame)
