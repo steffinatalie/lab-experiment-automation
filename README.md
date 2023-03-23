@@ -1,5 +1,4 @@
-# skripsi_bang_normen
-Laboratory experiment automation
+# lab-experiment-automation
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -26,3 +25,17 @@ Laboratory experiment automation
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
+
+## About The Project
+
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
+
+This project is created to enhance experiment eficiency in doing repetitive task and managing experiment datas.
+
+Bried explanation about the experiment:
+* lorem ipsum
+* lorem ipsum
+* lorem ipsum
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
