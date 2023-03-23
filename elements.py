@@ -53,7 +53,7 @@ class RightBottom1Frame:
     def __init__(self, location):
         self.location = location
         
-        self.default_path = utils.create_path(settings.FOLDER_READINGS)
+        self.default_path = utils.create_folder(settings.FOLDER_READINGS)
         
         self.title_label = Label(
             self.location,
@@ -365,7 +365,7 @@ class LeftTopFrame:
     def experiment_prestart(self):
         askFolderName_test2.ask_for_text(self.root)
         
-        if com.update_experiment_folder_name() != None:
+        if com.update_experiment_folder_path() != None:
             
                 # run experiment
                 threads.main()

@@ -6,20 +6,20 @@ class Communicate:
     actuator_port = None
     port_state = None # 1 or None for error handling
     
-    experiment_state = settings.START # change to None
+    experiment_state = None # change to None
     time_config = []
     count_executions = None
     
     
     manual_control_state = None
-    experiment_folder_name = None
+    experiment_folder_path = None
     
     
     # PUBLISHES
     
     @staticmethod
-    def publish_experiment_folder_name(name):
-        Communicate.experiment_folder_name = name
+    def publish_experiment_folder_path(path):
+        Communicate.experiment_folder_path = path
     
     @staticmethod
     def publish_manual_control_state(state):
@@ -54,8 +54,8 @@ class Communicate:
     # UPDATES
     
     @staticmethod
-    def update_experiment_folder_name():
-        return Communicate.experiment_folder_name
+    def update_experiment_folder_path():
+        return Communicate.experiment_folder_path
     
     @staticmethod
     def update_manual_control_state():

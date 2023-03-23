@@ -4,12 +4,14 @@ import datetime
 from communicate_v2 import Communicate as com
 import os
 import utils
+import settings
+import threading
 
 class InputDialog(tk.Toplevel):
     def __init__(self, parent, default_text):
         super().__init__(parent)
         self.title("Input")
-        self.geometry("300x150")
+        self.geometry("400x150")
         self.default_text = default_text
 
         label = tk.Label(self, text="Enter experiment directory name\n(The datas will be saved in this directory):")
@@ -33,36 +35,47 @@ class InputDialog(tk.Toplevel):
         
         
         # create path to the folder
-        path = utils.create_path(self.result)
+        path = utils.create_path(f"{settings.FOLDER_READINGS}\{self.result}")
         
+        print(os.path.exists(path))
         # check if file already exist
-        if os.path.exists(path) != False:
-            # update folder name
-            com.publish_experiment_folder_name(self.result)
+        if os.path.exists(path) == False:
+            # update folder path
+            com.publish_experiment_folder_path(path)
+            print("published")
+            utils.create_folder(f"{settings.FOLDER_READINGS}\{self.result}")
             
             self.destroy()
         else:
             # if the previous input already exist
             # popup change or override
-            self.messageWindow()
+            self.lift()
+            # self.after(2000)
+            th = threading.Thread(target=self.warning())
+            th.start()
+            
+            self.lift()
             # pass
 
     def cancel(self):
         self.destroy()
         
-    def messageWindow(self):
-        win = tk.Toplevel()
-        win.title('Warning')
-        message = "Experiment directory already exist\nDo you want to override it?"
-        tk.Label(win, text=message).pack()
-        tk.Button(win, text='Delete', command=win.destroy).pack()
+        
+    def warning(self):
+        messagebox.showerror(
+            title="Warning",
+            message="Experiment directory already exist!"
+        )
+        
+        
 
 def ask_for_text(root):
-    default_text = f"Experiment({datetime.datetime.now()})"
+    format = "%Y-%m-%d %H-%M-%S"
+    default_text = f"Experiment{datetime.datetime.now().strftime(format)}"
     dialog = InputDialog(root, default_text)
     root.wait_window(dialog)
     text = dialog.result
     if text is not None:
-        print("You entered:", text)
+        print("You entered:", com.update_experiment_folder_path())
         
 

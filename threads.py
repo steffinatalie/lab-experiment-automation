@@ -26,6 +26,7 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- get the experiment folder
 - try except print to log
 - manual reading
 - make it won't ovveride the previous files
@@ -137,7 +138,7 @@ def data_write():
     
     ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
-    path = utils.create_path(settings.FOLDER_READINGS)
+    path = utils.create_folder(settings.FOLDER_READINGS)
     
     
     # file naming and prevent override

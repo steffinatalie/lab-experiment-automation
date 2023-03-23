@@ -7,15 +7,21 @@ def width_prct(percentage):
 
 def height_prct(percentage):
     return (settings.WINDOW_HEIGHT / 100) * percentage
-        
+
 def create_path(folder):
+    # creates the string only
     cwd = os.getcwd()
-    print(cwd)
     dir = f"{cwd}\{folder}"
+    return dir
+        
+def create_folder(folder):
+    # not only create the string
+    # it creates the actual folder
+    dir = create_path(folder)
     if not os.path.exists(dir):
         os.makedirs(dir)
     
-    return f"{dir}"
+    return dir
 
 def dummy():
     pass
