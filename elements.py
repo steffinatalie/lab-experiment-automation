@@ -27,6 +27,7 @@ import os
 BUG:
 
 TODO:
+- close the log when main window closed
 - display folder name
 - ask folder name before start the program (if already exist ask to change or override)
 - disable manual when auto

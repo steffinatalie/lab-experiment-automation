@@ -27,7 +27,7 @@ Read state       : reading, notreading
 
 TODO:
 - get the experiment folder
-- try except print to log
+- try except print error to log
 - manual reading
 - make it won't ovveride the previous files
 - stop needs improvement
@@ -184,19 +184,28 @@ def data_write():
         
 def move_forward():
     print("FORWARD")
-    ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-    countdown(settings.PUSH_DURATION)
+    try:
+        ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
+        countdown(settings.PUSH_DURATION)
+    except:
+        print("Serial communication not established")
     
 
 def idle():
     print("IDLE")
-    ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-    countdown(settings.IDLE_SEND_DURATION)
+    try:
+        ser_actuator.write(bytes(settings.IDLE, "utf-8"))
+        countdown(settings.IDLE_SEND_DURATION)
+    except:
+        print("Serial communication not established")
 
 def move_backward():
     print("BACKWARD")
-    ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-    countdown(settings.PULL_DURATION)
+    try:
+        ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
+        countdown(settings.PULL_DURATION)
+    except:
+        print("Serial communication not established")
 
 
 def manual_control_time_keeper():
