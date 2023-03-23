@@ -24,7 +24,6 @@ import os
 
 """
 BUG:
-- actuator port can't be selected after sensor port selected
 
 TODO:
 - display folder name
@@ -116,9 +115,10 @@ class RightTopFrame:
 
 
 class LeftTopFrame:
-    def __init__(self, root, location):
+    def __init__(self, root, location, leftBottomFrame):
         self.root = root
         self.location = location
+        self.leftBottomFrame = leftBottomFrame
         
         self.input_folder = None
         self.start_clicked = False
@@ -198,13 +198,13 @@ class LeftTopFrame:
         )
         
         self.auto_manual_variable = IntVar()
-        self.auto_manual_variable.set(settings.STOP)
+        self.auto_manual_variable.set(settings.MODE_MANUAL)
         
         self.enable_manual_radiobutton = Radiobutton(
             self.location,
             text="Manual",
             variable=self.auto_manual_variable,
-            value=settings.START,
+            value=settings.MODE_AUTO,
             indicator=0,
             width=settings.BUTTON_WIDTH,
             pady= 5
@@ -218,7 +218,7 @@ class LeftTopFrame:
             self.location,
             text="Auto",
             variable=self.auto_manual_variable,
-            value=settings.STOP,
+            value=settings.MODE_MANUAL,
             indicator=0,
             width=settings.BUTTON_WIDTH,
             pady= 5
@@ -226,6 +226,10 @@ class LeftTopFrame:
         self.enable_auto_radiobutton.grid(
             column=2, row=10, sticky='se', pady=40
         )
+        
+        self.enable_manual_radiobutton.bind("<ButtonRelease-1>", lambda event: self.auto_manual_enable())
+        self.enable_auto_radiobutton.bind("<ButtonRelease-1>", lambda event: self.auto_manual_enable())
+        
         
         # START BUTTON
         self.start_button = Button(
@@ -399,18 +403,25 @@ class LeftTopFrame:
             message=msg
         )
         
-    def experiment_state_callback(self):
-        experiment_state = com.update_experiment_state()
+    def auto_manual_enable(self):
+        if self.auto_manual_variable.get() == settings.MODE_MANUAL:
+            self.start_button.config(state="disabled")
+            self.leftBottomFrame.push_actuator_button.config(state="normal")
+            self.leftBottomFrame.pull_actuator_button.config(state="normal")
+            self.leftBottomFrame.idle_actuator_button.config(state="normal")
+            self.leftBottomFrame.start_read_button.config(state="normal")
+            self.leftBottomFrame.save_read_button.config(state="normal")
+            # print("Manual mode")
+        else:
+            self.start_button.config(state="normal")
+            self.leftBottomFrame.push_actuator_button.config(state="disabled")
+            self.leftBottomFrame.push_actuator_button.config(state="disabled")
+            self.leftBottomFrame.pull_actuator_button.config(state="disabled")
+            self.leftBottomFrame.idle_actuator_button.config(state="disabled")
+            self.leftBottomFrame.start_read_button.config(state="disabled")
+            self.leftBottomFrame.save_read_button.config(state="disabled")
+            # print("Auto mode")
         
-        while experiment_state == settings.START:
-            experiment_state = com.update_experiment_state()
-        
-        self.start_button.config(
-            state="normal"
-        )
-        self.stop_button.config(
-            state="disabled"
-        )
         
     def experiment_log_window(self, event):
         terminalToGui_test.main()
@@ -436,7 +447,8 @@ class LeftBottomFrame:
             text="Start Read",
             command=utils.dummy,
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT
+            height=settings.BUTTON_HEIGHT,
+            state="disabled"
         )
         self.start_read_button.grid(
             column=3, row=1, rowspan=2, sticky='nw'
@@ -447,7 +459,8 @@ class LeftBottomFrame:
             text="Save Data",
             command=utils.dummy,
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT
+            height=settings.BUTTON_HEIGHT,
+            state="disabled"
         )
         self.save_read_button.grid(
             column=3, row=2, rowspan=2, sticky='nw', pady= 5
@@ -458,7 +471,8 @@ class LeftBottomFrame:
             text="Push", 
             command=self.push_actuator, 
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT
+            height=settings.BUTTON_HEIGHT,
+            state="disabled"
         )
         self.push_actuator_button.grid(
             column=2, row=1, rowspan=2, padx=10, sticky='ne'
@@ -469,7 +483,8 @@ class LeftBottomFrame:
             text="Idle", 
             command=self.idle_actuator, 
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT
+            height=settings.BUTTON_HEIGHT,
+            state="disabled"
         )
         self.idle_actuator_button.grid(
             column=2, row=2, rowspan=2, padx=10, pady= 5, sticky='ne'
@@ -480,7 +495,8 @@ class LeftBottomFrame:
             text="Pull", 
             command=self.pull_actuator, 
             width=settings.BUTTON_WIDTH,
-            height=settings.BUTTON_HEIGHT
+            height=settings.BUTTON_HEIGHT,
+            state="disabled"
         )
         self.pull_actuator_button.grid(
             column=2, row=3, rowspan=2, padx=10, sticky='ne'
