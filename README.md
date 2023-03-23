@@ -6,9 +6,6 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <!-- <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul> -->
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -18,8 +15,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <!-- <li><a href="#roadmap">Roadmap</a></li> -->
-    <!-- <li><a href="#contributing">Contributing</a></li> -->
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -28,7 +23,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
 This project is created to enhance experiment eficiency in doing repetitive task and managing experiment datas.
 
@@ -39,3 +34,45 @@ Bried explanation about the experiment:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Getting Started
+
+### Prerequisites
+
+* python
+  ```sh
+  lorem ipsum
+  ```
+
+* tkinter
+* pyserial
+* pandas
+* matplotlib
+* lorem ipsum
+
+### Installation
+
+Clone the repo
+   ```sh
+   git clone https://github.com/steffinatalie/lab-experiment-automation.git
+   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Usage
+
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## License
+
+Distributed under the MIT License.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contact
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Acknowledgements
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
