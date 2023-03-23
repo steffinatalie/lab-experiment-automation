@@ -405,14 +405,23 @@ class LeftTopFrame:
         
     def auto_manual_enable(self):
         if self.auto_manual_variable.get() == settings.MODE_MANUAL:
+            # buttons 
             self.start_button.config(state="disabled")
             self.leftBottomFrame.push_actuator_button.config(state="normal")
             self.leftBottomFrame.pull_actuator_button.config(state="normal")
             self.leftBottomFrame.idle_actuator_button.config(state="normal")
             self.leftBottomFrame.start_read_button.config(state="normal")
             self.leftBottomFrame.save_read_button.config(state="normal")
-            # print("Manual mode")
+            
+            # run manual thread
+            threads.manual_control()
+            
+            print("Manual mode")
         else:
+            # kill manual thread
+            com.publish_manual_control_state(settings.KILLED)
+            
+            # buttons
             self.start_button.config(state="normal")
             self.leftBottomFrame.push_actuator_button.config(state="disabled")
             self.leftBottomFrame.push_actuator_button.config(state="disabled")
@@ -420,7 +429,8 @@ class LeftTopFrame:
             self.leftBottomFrame.idle_actuator_button.config(state="disabled")
             self.leftBottomFrame.start_read_button.config(state="disabled")
             self.leftBottomFrame.save_read_button.config(state="disabled")
-            # print("Auto mode")
+            
+            print("Auto mode")
         
         
     def experiment_log_window(self, event):
@@ -651,13 +661,13 @@ class LeftBottomFrame:
         )
         
     def push_actuator(self):
-        pass
+        com.publish_manual_control_state(settings.FORWARD)
     
     def pull_actuator(self):
-        pass
+        com.publish_manual_control_state(settings.BACKWARD)
     
     def idle_actuator(self):
-        pass
+        com.publish_manual_control_state(settings.IDLE)
 
         
 

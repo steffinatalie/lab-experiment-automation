@@ -178,23 +178,23 @@ def data_write():
         
 def move_forward():
     print("FORWARD")
-    ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-    countdown(settings.PUSH_DURATION)
+    # ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
+    # countdown(settings.PUSH_DURATION)
     
 
 def idle():
     print("IDLE")
-    ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-    countdown(settings.IDLE_SEND_DURATION)
+    # ser_actuator.write(bytes(settings.IDLE, "utf-8"))
+    # countdown(settings.IDLE_SEND_DURATION)
 
 def move_backward():
     print("BACKWARD")
-    ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-    countdown(settings.PULL_DURATION)
+    # ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
+    # countdown(settings.PULL_DURATION)
 
 
-def port_check():
-    pass
+# def port_check():
+#     pass
 
 def manual_control_time_keeper():
     global is_timekeeping, manual_control_state
