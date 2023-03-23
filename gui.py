@@ -3,12 +3,13 @@ import settings
 import utils
 from elements import LeftTopFrame, LeftBottomFrame, RightTopFrame, RightBottom1Frame
 from communicate_v2 import Communicate as com
-import time
-import threading
+# import time
+# import threading
 # from tkterminal import Terminal
 
 root = Tk()
 root.title("Experiment Control Station")
+root.resizable(False, False)
 
 root.geometry(f"{settings.WINDOW_WIDTH}x{settings.WINDOW_HEIGHT}") 
 # root.configure(bg="black")
@@ -47,7 +48,7 @@ right_bottom_1_frame = Frame(
 right_bottom_1_frame.place(x=utils.width_prct(45), y=utils.height_prct(80))
 
 # frames
-ltf = LeftTopFrame(left_top_frame)
+ltf = LeftTopFrame(root, left_top_frame)
 lbf = LeftBottomFrame(left_bottom_frame)
 rtf = RightTopFrame(right_top_frame)
 rb1f = RightBottom1Frame(right_bottom_1_frame)

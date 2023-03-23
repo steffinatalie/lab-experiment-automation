@@ -5,9 +5,11 @@ from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
 import utils
-import datetime
+
 
 # testings
+import askFolderName_test2
+
 import terminalToGui_test
 
 import tkinter as tk
@@ -18,7 +20,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import filedialog
 import os
 
-import time
+# import time
 
 
 """
@@ -111,7 +113,8 @@ class RightTopFrame:
 
 
 class LeftTopFrame:
-    def __init__(self, location):
+    def __init__(self, root, location):
+        self.root = root
         self.location = location
         
         self.input_folder = None
@@ -330,9 +333,7 @@ class LeftTopFrame:
         
         
     def start(self, event):
-        self.start_clicked = True
-        th = threading.Thread(target=self.check_start_clicked, daemon=True)
-        th.start()
+
         
         try:
             print(com.publish_port_state() + 1)
@@ -344,53 +345,32 @@ class LeftTopFrame:
             com.publish_experiment_state(settings.START)
             com.publish_time_config(time_config)
             
-            
-            
-            # run threads.py
-            threads.main()
-            
-            self.start_button.config(
-                state="disabled"
-            )
-            
-            self.stop_button.config(
-                state="normal"
-            )
-
+            # ask folder name
+            th = threading.Thread(target=self.experiment_prestart)
+            th.start()
             
         
         except:
-            
-            
             # pop up
             
-            # th = threading.Thread(target=self.error_popup)
-            # th.start()
-            pass
-            
-        self.start_clicked = False
-            
-            
-    def check_start_clicked(self):
-        # print("hey")
-        while self.start_clicked:
-            print("hey")
-            continue
+            th = threading.Thread(target=self.error_popup)
+            th.start()
         
-        if com.update_experiment_state() == settings.START:
-            self.ask_for_folder_name()
+    def experiment_prestart(self):
+        askFolderName_test2.ask_for_text(self.root)
         
-        
+        if com.update_experiment_folder_name() != None:
             
-            
-    def ask_for_folder_name(self):
-        default_folder = f"Experiment({datetime.datetime.now()})"
-        self.input_folder = simpledialog.askstring("Input", "Enter data folder name: ", initialvalue=default_folder)
-        print("You entered:", self.input_folder)
-        self.location.after(2500)
-        
-
-
+                # run experiment
+                threads.main()
+                
+                self.start_button.config(
+                    state="disabled"
+                )
+                
+                self.stop_button.config(
+                    state="normal"
+                )
         
     def stop(self, event):
 
@@ -451,7 +431,7 @@ class LeftBottomFrame:
         self.start_read_button = Button(
             self.location,
             text="Start Read",
-            command=self.dummy,
+            command=utils.dummy,
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT
         )
@@ -462,7 +442,7 @@ class LeftBottomFrame:
         self.save_read_button = Button(
             self.location,
             text="Save Data",
-            command=self.dummy,
+            command=utils.dummy,
             width=settings.BUTTON_WIDTH,
             height=settings.BUTTON_HEIGHT
         )
@@ -659,9 +639,7 @@ class LeftBottomFrame:
     
     def idle_actuator(self):
         pass
-    
-    def dummy(self):
-        pass
+
         
 
         

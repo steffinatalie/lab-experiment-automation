@@ -2,15 +2,21 @@
 import settings
 
 class Communicate:
-    experiment_state = settings.START
+    experiment_state = settings.START # change to None
     time_config = []
     count_executions = None
     sensor_port = None
     actuator_port = None
     port_state = None # 1 or None
     manual_control_state = None
+    experiment_folder_name = None
+    
     
     # PUBLISHES
+    
+    @staticmethod
+    def publish_experiment_folder_name(name):
+        Communicate.experiment_folder_name = name
     
     @staticmethod
     def publish_manual_control_state(state):
@@ -43,6 +49,10 @@ class Communicate:
         
         
     # UPDATES
+    
+    @staticmethod
+    def update_experiment_folder_name():
+        return Communicate.experiment_folder_name
     
     @staticmethod
     def update_manual_control_state():
