@@ -581,7 +581,7 @@ class LeftBottomFrame:
             menu1.add_command(label=port,
                               command=lambda value=port: self.sensor_port_variable.set(value))
             menu2.add_command(label=port,
-                              command=lambda value=port: self.sensor_port_variable.set(value))
+                              command=lambda value=port: self.actuator_port_variable.set(value))
         
     
     def apply_port(self):
