@@ -1,7 +1,5 @@
 import tkinter as tk
 import sys
-import subprocess
-import threading 
 
 # --- classes ---
 
@@ -18,24 +16,9 @@ def main():
             if self.autoscroll:
                 self.widget.see("end")  # autoscroll
             
-        #def flush(self):
-        #    pass
+        def flush(self):
+           pass
 
-    # --- functions ---
-
-    def run():
-        threading.Thread(target=test).start()
-
-    def test():
-        print("Thread: start")
-
-        p = subprocess.Popen("ping -c 4 stackoverflow.com".split(), stdout=subprocess.PIPE, bufsize=1, text=True)
-        while p.poll() is None:
-            msg = p.stdout.readline().strip() # read a line from the process output
-            if msg:
-                print(msg)
-
-        print("Thread: end")
 
     # --- main ---    
 
@@ -59,9 +42,6 @@ def main():
     sys.stdout = Redirect(text)
 
     # - rest -
-
-    button = tk.Button(root, text='TEST', command=run)
-    button.pack()
 
     root.mainloop()
 

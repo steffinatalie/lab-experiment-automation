@@ -79,16 +79,16 @@ def time_keeper():
             
             # begin reading data from sensors
             read_state = settings.START
-            print("is reading")
-            # th = threading.Thread(target=data_write)
-            # th.start()
+            # print("is reading")
+            th = threading.Thread(target=data_write)
+            th.start()
             
             # reading duration
             countdown(read_duration)
             
             # stop reading
             read_state = settings.STOP
-            # th.join()
+            th.join()
             
             # go back to the initial position
             move_forward()
@@ -152,7 +152,7 @@ def data_write():
     df = pd.DataFrame(columns=c)
     df.to_excel(filename, index=False)
     
-    print(df)
+    # print(df)
     
 
     while read_state == settings.START:
@@ -179,19 +179,19 @@ def data_write():
         
 def move_forward():
     print("FORWARD")
-    # ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-    # countdown(settings.PUSH_DURATION)
+    ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
+    countdown(settings.PUSH_DURATION)
     
 
 def idle():
     print("IDLE")
-    # ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-    # countdown(settings.IDLE_SEND_DURATION)
+    ser_actuator.write(bytes(settings.IDLE, "utf-8"))
+    countdown(settings.IDLE_SEND_DURATION)
 
 def move_backward():
     print("BACKWARD")
-    # ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-    # countdown(settings.PULL_DURATION)
+    ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
+    countdown(settings.PULL_DURATION)
 
 
 def manual_control_time_keeper():
@@ -234,8 +234,6 @@ def manual_control_state_check():
 def port_assignment():
     global ser_sensor, ser_actuator
     
-    print("works")
-    
     sensor_port = com.update_sensor_port()
     actuator_port = com.update_actuator_port()
     
@@ -247,8 +245,11 @@ def port_assignment():
     
 
 def manual_control():
+    
     th = threading.Thread(target=manual_control_state_check)
     th.start()
+    
+    print("MANUAL MODE")
     
 
 def main():

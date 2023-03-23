@@ -342,9 +342,8 @@ class LeftTopFrame:
         
     def start(self, event):
 
-        
         try:
-            print(com.publish_port_state() + 1)
+            print(f"[ignore] port error handling {com.publish_port_state() + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -417,7 +416,7 @@ class LeftTopFrame:
             # run manual thread
             threads.manual_control()
             
-            print("Manual mode")
+            # print("Manual mode")
         else:
             # kill manual thread
             com.publish_manual_control_state(settings.KILLED)
@@ -431,7 +430,7 @@ class LeftTopFrame:
             self.leftBottomFrame.start_read_button.config(state="disabled")
             self.leftBottomFrame.save_read_button.config(state="disabled")
             
-            print("Auto mode")
+            # print("Auto mode")
         
         
     def experiment_log_window(self, event):
@@ -592,7 +591,7 @@ class LeftBottomFrame:
     def refresh_port(self):
         ports = self.get_ports
         for port in ports:
-            print(port)
+            print(f"Detected port: {port}")
             
         if ports == ["None"]:
             self.sensor_port_variable.set("None")
@@ -640,7 +639,7 @@ class LeftBottomFrame:
             # assign the ports
             threads.port_assignment()
             
-            print("applied")
+            print("Ports applied")
         
     
     def error_no_port(self):
