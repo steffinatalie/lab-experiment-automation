@@ -20,11 +20,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import filedialog
 import os
 
-# import time
 
 
 """
+BUG:
+- actuator port can't be selected after sensor port selected
+
 TODO:
+- display folder name
 - ask folder name before start the program
 - disable manual when auto
 - check the select port using two arduinos

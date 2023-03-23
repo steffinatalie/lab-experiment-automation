@@ -42,7 +42,3 @@ def ask_for_text(root):
     if text is not None:
         print("You entered:", text)
 
-# root = tk.Tk()
-# # button = tk.Button(root, text="Click me!", command=ask_for_text)
-# # button.pack()
-# root.mainloop()
