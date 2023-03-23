@@ -13,7 +13,7 @@ import askFolderName_test2
 
 import terminalToGui_test
 
-import tkinter as tk
+import tkinter as tk #bro
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -28,7 +28,7 @@ BUG:
 
 TODO:
 - display folder name
-- ask folder name before start the program
+- ask folder name before start the program (if already exist ask to change or override)
 - disable manual when auto
 - check the select port using two arduinos
 - check whether port is flipped
@@ -122,7 +122,6 @@ class LeftTopFrame:
         self.leftBottomFrame = leftBottomFrame
         
         self.input_folder = None
-        self.start_clicked = False
         
         self.executions_count_variable = IntVar()
         self.executions_count_variable.set(0)
@@ -343,14 +342,14 @@ class LeftTopFrame:
     def start(self, event):
 
         try:
-            print(f"[ignore] port error handling {com.publish_port_state() + 1}")
+            # print(f"[ignore] port error handling {com.publish_port_state() + 1}")
         
-            time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
-                        int(float(self.input_read_duration.get(1.0, "end-1c"))),
-                        int(float(self.input_executions.get(1.0, "end-1c")))]
+            # time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
+            #             int(float(self.input_read_duration.get(1.0, "end-1c"))),
+            #             int(float(self.input_executions.get(1.0, "end-1c")))]
         
-            com.publish_experiment_state(settings.START)
-            com.publish_time_config(time_config)
+            # com.publish_experiment_state(settings.START)
+            # com.publish_time_config(time_config)
             
             # ask folder name
             th = threading.Thread(target=self.experiment_prestart)

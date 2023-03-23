@@ -6,6 +6,7 @@ import utils
 import datetime
 import pandas as pd
 from communicate_v2 import Communicate as com
+import os
 
 experiment_state = None
 read_state = None
@@ -25,6 +26,7 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- try except print to log
 - manual reading
 - make it won't ovveride the previous files
 - stop needs improvement
@@ -137,13 +139,15 @@ def data_write():
     
     path = utils.create_path(settings.FOLDER_READINGS)
     
-    """
-    check if file already exist
     
-    """
-    
+    # file naming and prevent override
     count += 1
     filename = f"{path}\input{count}.xlsx"
+    if os.path.isfile(filename) == True:
+        count += 1
+        filename = f"{path}\input{count}.xlsx"
+    
+    
     
     c1 = ["Timestamp"]
     c2 = [f"Sensor{i}" for i in range(1,21)]

@@ -1,6 +1,10 @@
 import tkinter as tk
 import sys
 
+"""
+perhaps write the logs to file
+"""
+
 # --- classes ---
 
 def main():

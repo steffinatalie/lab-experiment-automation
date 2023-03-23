@@ -10,6 +10,7 @@ def height_prct(percentage):
         
 def create_path(folder):
     cwd = os.getcwd()
+    print(cwd)
     dir = f"{cwd}\{folder}"
     if not os.path.exists(dir):
         os.makedirs(dir)
