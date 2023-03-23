@@ -25,6 +25,7 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- manual reading
 - make it won't ovveride the previous files
 - stop needs improvement
 - read state should also be sent through serial to the other arduino
@@ -193,9 +194,6 @@ def move_backward():
     # countdown(settings.PULL_DURATION)
 
 
-# def port_check():
-#     pass
-
 def manual_control_time_keeper():
     global is_timekeeping, manual_control_state
     
@@ -232,6 +230,21 @@ def manual_control_state_check():
     
     is_timekeeping = False
     idle()
+    
+def port_assignment():
+    global ser_sensor, ser_actuator
+    
+    print("works")
+    
+    sensor_port = com.update_sensor_port()
+    actuator_port = com.update_actuator_port()
+    
+    ser_sensor = serial.Serial(sensor_port, 9800, timeout=1)
+    ser_actuator = serial.Serial(actuator_port, 9800, timeout=1)
+    
+    print(f"Sensor port: {sensor_port}\n")
+    print(f"Actuator port: {actuator_port}\n")
+    
 
 def manual_control():
     th = threading.Thread(target=manual_control_state_check)

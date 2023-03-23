@@ -8,6 +8,7 @@ import utils
 
 
 # testings
+
 import askFolderName_test2
 
 import terminalToGui_test
@@ -580,7 +581,6 @@ class LeftBottomFrame:
         ports = []
         is_exist = False
         for port in port_list.comports():
-            print("hey")
             is_exist = True
             ports.append(port.device)
             
@@ -629,10 +629,17 @@ class LeftBottomFrame:
             # popup
             self.error_same_port()
         
-        else:
+        else:  
+            sensor_port = sensor_port.strip("(),'")
+            actuator_port = actuator_port.strip("(),'")
+            
             com.publish_sensor_port(sensor_port)
             com.publish_actuator_port(actuator_port)
             com.publish_port_state(1)
+            
+            # assign the ports
+            threads.port_assignment()
+            
             print("applied")
         
     
@@ -660,6 +667,10 @@ class LeftBottomFrame:
             message="Sensor and actuator port cannot be the same!"
         )
         
+        
+        
+    # NAVIGATIONS
+    
     def push_actuator(self):
         com.publish_manual_control_state(settings.FORWARD)
     
