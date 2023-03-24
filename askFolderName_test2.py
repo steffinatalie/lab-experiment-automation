@@ -37,12 +37,15 @@ class InputDialog(tk.Toplevel):
         # create path to the folder
         path = utils.create_path(f"{settings.FOLDER_READINGS}\{self.result}")
         
-        print(os.path.exists(path))
+        # print(os.path.exists(path))
+        
         # check if file already exist
         if os.path.exists(path) == False:
             # update folder path
             com.publish_experiment_folder_path(path)
-            print("published")
+            print("Folder path published")
+            
+            # create the folder
             utils.create_folder(f"{settings.FOLDER_READINGS}\{self.result}")
             
             self.destroy()
@@ -50,7 +53,7 @@ class InputDialog(tk.Toplevel):
             # if the previous input already exist
             # popup change or override
             self.lift()
-            # self.after(2000)
+            
             th = threading.Thread(target=self.warning())
             th.start()
             

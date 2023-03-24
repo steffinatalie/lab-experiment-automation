@@ -24,9 +24,15 @@ import os
 
 
 """
+MAYBE:
+- should there be a feature to continue an experiment...
+
 BUG:
+- multiple logs, bug or not depends on your perspective
+- start without any configs, perhaps because i comment some stuff
 
 TODO:
+- disable log button when log already opened
 - close the log when main window closed
 - display folder name
 - ask folder name before start the program (if already exist ask to change or override)
@@ -345,12 +351,12 @@ class LeftTopFrame:
         try:
             # print(f"[ignore] port error handling {com.publish_port_state() + 1}")
         
-            # time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
-            #             int(float(self.input_read_duration.get(1.0, "end-1c"))),
-            #             int(float(self.input_executions.get(1.0, "end-1c")))]
+            time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
+                        int(float(self.input_read_duration.get(1.0, "end-1c"))),
+                        int(float(self.input_executions.get(1.0, "end-1c")))]
         
-            # com.publish_experiment_state(settings.START)
-            # com.publish_time_config(time_config)
+            com.publish_experiment_state(settings.START)
+            com.publish_time_config(time_config)
             
             # ask folder name
             th = threading.Thread(target=self.experiment_prestart)
@@ -434,7 +440,18 @@ class LeftTopFrame:
         
         
     def experiment_log_window(self, event):
+        # self.experiment_log_button.config(
+        #         state="disabled"
+        #     )
+        
         terminalToGui_test.main()
+        
+        # self.experiment_log_button.config(
+        #         state="normal"
+        #     )
+        
+        
+        
         
         
 class LeftBottomFrame:

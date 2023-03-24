@@ -26,6 +26,7 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- modifiy all the prints
 - get the experiment folder
 - try except print error to log
 - manual reading
@@ -136,19 +137,22 @@ def experiment_state_check():
 def data_write():
     global read_state, count
     
+    # KZG
     ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
-    path = utils.create_folder(settings.FOLDER_READINGS)
+    # path = utils.create_folder(settings.FOLDER_READINGS)
+    folder_path = com.update_experiment_folder_path()
+    
     
     
     # file naming and prevent override
     count += 1
-    filename = f"{path}\input{count}.xlsx"
+    filename = f"{folder_path}\input{count}.xlsx"
     if os.path.isfile(filename) == True:
         count += 1
-        filename = f"{path}\input{count}.xlsx"
+        filename = f"{folder_path}\input{count}.xlsx"
     
-    
+    print(f"Is writing to {filename}")
     
     c1 = ["Timestamp"]
     c2 = [f"Sensor{i}" for i in range(1,21)]

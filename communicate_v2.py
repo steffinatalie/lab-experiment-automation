@@ -15,7 +15,9 @@ class Communicate:
     experiment_folder_path = None
     
     
+    
     # PUBLISHES
+        
     
     @staticmethod
     def publish_experiment_folder_path(path):

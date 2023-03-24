@@ -1,5 +1,6 @@
 import tkinter as tk
 import sys
+from communicate_v2 import Communicate as com
 
 """
 perhaps write the logs to file
@@ -28,6 +29,7 @@ def main():
 
     root = tk.Tk()
 
+
     # - Frame with Text and Scrollbar -
 
     frame = tk.Frame(root)
@@ -44,6 +46,7 @@ def main():
 
     old_stdout = sys.stdout    
     sys.stdout = Redirect(text)
+    
 
     # - rest -
 
@@ -52,3 +55,7 @@ def main():
     # - after close window -
 
     sys.stdout = old_stdout
+    
+
+    
+    
