@@ -22,7 +22,7 @@ FORWARD = '2'
 IDLE = '3'
 BACKWARD = '4'
 
-
+# KZG
 TIME_MULTIPLIER = 3 # change to 60
 
 

@@ -128,7 +128,17 @@ class LeftTopFrame:
         self.location = location
         self.leftBottomFrame = leftBottomFrame
         
-        self.input_folder = None
+        self.experiment_folder_variable = StringVar()
+        # self.experiment_folder_variable.set("test")
+        self.experiment_folder_label = Label(
+            self.location,
+            text="",
+            textvariable=self.experiment_folder_variable,
+            font='Helvetica 8 bold'
+        )
+        self.experiment_folder_label.grid(
+            column=1, row=0, sticky='e'
+        )
         
         self.executions_count_variable = IntVar()
         self.executions_count_variable.set(0)
@@ -373,7 +383,12 @@ class LeftTopFrame:
         askFolderName_test2.ask_for_text(self.root)
         
         if com.update_experiment_folder_path() != None:
-            
+
+                # display the folder name
+                self.experiment_folder_variable.set(
+                    com.update_experiment_folder_display()
+                )
+                
                 # run experiment
                 threads.main()
                 

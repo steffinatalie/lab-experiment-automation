@@ -31,7 +31,7 @@ class InputDialog(tk.Toplevel):
 
     def ok(self):
         self.result = self.entry.get()
-        print(self.result)
+        # print(self.result)
         
         
         # create path to the folder
@@ -47,6 +47,9 @@ class InputDialog(tk.Toplevel):
             
             # create the folder
             utils.create_folder(f"{settings.FOLDER_READINGS}\{self.result}")
+            
+            # publish folder name to GUI
+            com.publish_experiment_folder_display(self.result)
             
             self.destroy()
         else:

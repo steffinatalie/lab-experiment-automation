@@ -6,6 +6,7 @@ class Communicate:
     actuator_port = None
     port_state = None # 1 or None for error handling
     
+    experiment_folder_display = None
     experiment_state = None # change to None
     time_config = []
     count_executions = None
@@ -17,7 +18,10 @@ class Communicate:
     
     
     # PUBLISHES
-        
+    
+    @staticmethod
+    def publish_experiment_folder_display(folder):
+        Communicate.experiment_folder_display = f"Dir: {folder}"
     
     @staticmethod
     def publish_experiment_folder_path(path):
@@ -54,6 +58,10 @@ class Communicate:
         
         
     # UPDATES
+    
+    @staticmethod
+    def update_experiment_folder_display():
+        return Communicate.experiment_folder_display
     
     @staticmethod
     def update_experiment_folder_path():
