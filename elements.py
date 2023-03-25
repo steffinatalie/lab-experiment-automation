@@ -498,7 +498,7 @@ class LeftTopFrame:
         #     )
         
     def displays_callback(self):
-        while com.experiment_state != settings.KILLED:
+        while com.update_experiment_state() != settings.KILLED:
             self.executions_count_variable = com.update_count_executions()
             self.time_left_until_next_execution_variable = com.update_minutes_countdown()
             self.actuator_state_variable = com.update_actuator_state()

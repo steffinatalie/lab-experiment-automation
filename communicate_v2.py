@@ -81,6 +81,7 @@ class Communicate:
     
     """
     wait probably all these should be @property instead
+    or like just com.variable ???
     
     """
     
