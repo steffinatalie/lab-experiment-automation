@@ -2,14 +2,22 @@
 import settings
 
 class Communicate:
-    sensor_port = None
-    actuator_port = None
-    port_state = None # 1 or None for error handling
     
+    # KZG
+    sensor_port = settings.DEFAULT_SENSOR_PORT # default: None, testing: settings.DEFAULT_SENSOR_PORT
+    actuator_port = settings.DEFAULT_ACTUATOR_PORT # default: None, testing: settings.DEFAULT_ACTUATOR_PORT
+    port_state = 1 # default: None, values: (None, 1), testing: 1
+    
+
+    experiment_state = settings.START # default: None, testing: settings.START
     experiment_folder_display = None
-    experiment_state = None # change to None
     time_config = []
+    
+    # for displays in GUI
     count_executions = None
+    minutes_countdown = None
+    actuator_state = None
+    read_state = None
     
     
     manual_control_state = None
@@ -18,6 +26,18 @@ class Communicate:
     
     
     # PUBLISHES
+    
+    @staticmethod
+    def publish_read_state(state):
+        Communicate.read_state = state
+    
+    @staticmethod
+    def publish_actuator_state(state):
+        Communicate.actuator_state = state
+    
+    @staticmethod
+    def publish_minutes_countdown(m):
+        Communicate.minutes_countdown = m
     
     @staticmethod
     def publish_experiment_folder_display(folder):
@@ -58,6 +78,23 @@ class Communicate:
         
         
     # UPDATES
+    
+    """
+    wait probably all these should be @property instead
+    
+    """
+    
+    @staticmethod
+    def update_read_state():
+        return Communicate.read_state
+    
+    @staticmethod
+    def update_actuator_state():
+        return Communicate.actuator_state
+    
+    @staticmethod
+    def update_minutes_countdown():
+        return Communicate.minutes_countdown
     
     @staticmethod
     def update_experiment_folder_display():

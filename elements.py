@@ -128,6 +128,10 @@ class LeftTopFrame:
         self.location = location
         self.leftBottomFrame = leftBottomFrame
         
+        
+        
+        
+        # DISPLAY EXPERIMENT FOLDER NAME
         self.experiment_folder_variable = StringVar()
         # self.experiment_folder_variable.set("test")
         self.experiment_folder_label = Label(
@@ -140,6 +144,10 @@ class LeftTopFrame:
             column=1, row=0, sticky='e'
         )
         
+        
+        
+        
+        # DISPLAY READING EXECUTIONS COUNT
         self.executions_count_variable = IntVar()
         self.executions_count_variable.set(0)
         
@@ -154,6 +162,10 @@ class LeftTopFrame:
             textvariable=self.executions_count_variable
         ).grid(columnspan=2, column=1, row=4)
         
+        
+        
+        
+        # DISPLAY MINUTES COUNTDOWN UNTIL THE NEXT EXECUTION
         self.time_left_until_next_execution_variable = IntVar()
         self.time_left_until_next_execution_variable.set(0)
         
@@ -168,6 +180,10 @@ class LeftTopFrame:
             textvariable=self.time_left_until_next_execution_variable
         ).grid(columnspan=2, column=1, row=4, rowspan=2, sticky='s')
         
+        
+        
+        
+        # DISPLAY ACTUATOR STATE
         self.actuator_state_variable = StringVar()
         self.actuator_state_variable.set("IDLE")
         
@@ -182,6 +198,10 @@ class LeftTopFrame:
             textvariable=self.actuator_state_variable
         ).grid(columnspan=2, column=0, row=6, pady=20, padx=100, sticky='w')
         
+        
+        
+        
+        # DISPLAY READING STATE
         self.read_state_variable = StringVar()
         self.read_state_variable.set("False")
         
@@ -196,6 +216,11 @@ class LeftTopFrame:
             textvariable=self.read_state_variable
         ).grid(columnspan=2, column=0, row=6, rowspan=2, padx=100, sticky='sw')
         
+        
+        
+        
+        
+        # LOG BUTTON
         self.experiment_log_button = Button(
             self.location,
             text="Experiment Log"
@@ -205,6 +230,8 @@ class LeftTopFrame:
         
         
         
+        
+        # CHANGE MODE AUTO MANUAL
         self.mode_label = Label(
             self.location,
             text="Mode :                  ",
@@ -230,7 +257,6 @@ class LeftTopFrame:
             column=1, row=10, sticky='se', pady=40
         )
         
-        
         self.enable_auto_radiobutton = Radiobutton(
             self.location,
             text="Auto",
@@ -248,6 +274,8 @@ class LeftTopFrame:
         self.enable_auto_radiobutton.bind("<ButtonRelease-1>", lambda event: self.auto_manual_enable())
         
         
+        
+        
         # START BUTTON
         self.start_button = Button(
             self.location,
@@ -260,6 +288,7 @@ class LeftTopFrame:
         )
         #bind
         self.start_button.bind("<Button-1>", self.start)
+        
         
         
         
@@ -300,6 +329,7 @@ class LeftTopFrame:
         
         
         
+        
         # TIME CONFIGS
         self.label_time_interval = Label(
             self.location,
@@ -318,7 +348,6 @@ class LeftTopFrame:
             column=2, row=1
         )
         
-        
         self.label_read_duration = Label(
             self.location,
             text="Read Duration (s)  "
@@ -335,7 +364,6 @@ class LeftTopFrame:
         self.input_read_duration.grid(
             column=2, row=2
         )
-        
         
         self.label_executions = Label(
             self.location,
@@ -391,6 +419,10 @@ class LeftTopFrame:
                 
                 # run experiment
                 threads.main()
+                
+                # run displays callback
+                th = threading.Thread(target= self.displays_callback())
+                th.start()
                 
                 self.start_button.config(
                     state="disabled"
@@ -465,8 +497,12 @@ class LeftTopFrame:
         #         state="normal"
         #     )
         
-        
-        
+    def displays_callback(self):
+        while com.experiment_state != settings.KILLED:
+            self.executions_count_variable = com.update_count_executions()
+            self.time_left_until_next_execution_variable = com.update_minutes_countdown()
+            self.actuator_state_variable = com.update_actuator_state()
+            self.read_state_variable = com.update_read_state()
         
         
 class LeftBottomFrame:
