@@ -387,7 +387,7 @@ class LeftTopFrame:
 
         try:
             #KZG
-            print(f"[ignore] port error handling {com.publish_port_state() + 1}")
+            print(f"[ignore] port error handling {com.update_port_state() + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -424,8 +424,8 @@ class LeftTopFrame:
                 threads.main()
                 
                 # run displays callback
-                th = threading.Thread(target= self.displays_callback())
-                th.start()
+                # th = threading.Thread(target= self.displays_callback())
+                # th.start()
                 
                 self.start_button.config(
                     state="disabled"
@@ -493,8 +493,10 @@ class LeftTopFrame:
         # self.experiment_log_button.config(
         #         state="disabled"
         #     )
-        
-        terminalToGui_test.main()
+        try:
+            terminalToGui_test.main()
+        except:
+            pass
         
         # self.experiment_log_button.config(
         #         state="normal"

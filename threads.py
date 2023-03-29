@@ -17,6 +17,7 @@ ser_sensor = None
 ser_actuator = None
 
 manual_control_state = None
+previous_manual_control_state = None
 
 # ser_sensor = serial.Serial("COM6", 9800, timeout=1)
 # ser_actuator = serial.Serial("COM4", 9800, timeout=1)
@@ -27,7 +28,7 @@ Read state       : reading, notreading
 
 TODO:
 - manual reading
-- modifiy all the prints
+- modifiy all the prints [non stop IDLE at log]
 - get the experiment folder
 - try except print error to log
 - make it won't ovveride the previous files
@@ -152,7 +153,7 @@ def data_write():
         count += 1
         filename = f"{folder_path}\input{count}.xlsx"
     
-    print(f"Is writing to {filename}")
+    print(f"\nIs writing to {filename}")
     
     c1 = ["Timestamp"]
     c2 = [f"Sensor{i}" for i in range(1,21)]
@@ -165,7 +166,7 @@ def data_write():
     
 
     while read_state == settings.START:
-        print("is reading\n")
+        # print("is reading\n")
         
         line = ser_sensor.readline()
         while(line.decode() == ''):
@@ -173,6 +174,8 @@ def data_write():
          
         decoded = line.decode()
         
+        """don't use list comprehension
+        """
         list = [float(x.strip()) for x in decoded.split(',')]
         timestamp = {"Timestamp": datetime.datetime.now()}
         data = {f"Sensor{index+1}": value for index, value in enumerate(list)}
@@ -213,13 +216,14 @@ def move_backward():
 
 
 def manual_control_time_keeper():
-    global is_timekeeping, manual_control_state
+    global is_timekeeping, manual_control_state, previous_manual_control_state
     
     # to check the change of control state
     # it will interrupt the current time countdown
     # so it can start another command
     
-    if manual_control_state != com.update_manual_control_state():
+    
+    if previous_manual_control_state != com.update_manual_control_state():
         is_timekeeping = False
         
     # if manual_control_state == settings.KILLED:
@@ -232,10 +236,11 @@ def manual_control_state_check():
     th = threading.Thread(target=manual_control_time_keeper)
     th.start()
     
+    # previous_manual_control_state = com.update_manual_control_state
     while manual_control_state != settings.KILLED:
         is_timekeeping = True
         manual_control_state = com.update_manual_control_state()
-        # time.sleep(0.5)
+        time.sleep(0.5)
         
         if manual_control_state == settings.FORWARD:
             move_forward()
