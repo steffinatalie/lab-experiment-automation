@@ -29,7 +29,6 @@ MAYBE:
 
 BUG:
 - multiple logs, bug or not depends on your perspective
-- start without any configs, perhaps because i comment some stuff
 
 TODO:
 - disable log button when log already opened
@@ -387,7 +386,8 @@ class LeftTopFrame:
     def start(self, event):
 
         try:
-            # print(f"[ignore] port error handling {com.publish_port_state() + 1}")
+            #KZG
+            print(f"[ignore] port error handling {com.publish_port_state() + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -408,7 +408,10 @@ class LeftTopFrame:
             th.start()
         
     def experiment_prestart(self):
-        askFolderName_test2.ask_for_text(self.root)
+        
+        """edit this
+        """
+        askFolderName_test2.ask_for_text(self.root) 
         
         if com.update_experiment_folder_path() != None:
 

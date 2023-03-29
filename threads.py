@@ -26,10 +26,10 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- manual reading
 - modifiy all the prints
 - get the experiment folder
 - try except print error to log
-- manual reading
 - make it won't ovveride the previous files
 - stop needs improvement
 - read state should also be sent through serial to the other arduino
@@ -116,7 +116,7 @@ def experiment_state_check():
 
     while experiment_state != settings.KILLED:
         experiment_state = com.update_experiment_state()
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
         
         if experiment_state == settings.STOP:
@@ -135,10 +135,10 @@ def experiment_state_check():
             
 
 def data_write():
-    global read_state, count
+    global read_state, count, ser_sensor
     
     # KZG
-    ser_sensor = serial.Serial("COM4", 9800, timeout=1)
+    # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
     # path = utils.create_folder(settings.FOLDER_READINGS)
     folder_path = com.update_experiment_folder_path()
@@ -235,7 +235,7 @@ def manual_control_state_check():
     while manual_control_state != settings.KILLED:
         is_timekeeping = True
         manual_control_state = com.update_manual_control_state()
-        time.sleep(0.5)
+        # time.sleep(0.5)
         
         if manual_control_state == settings.FORWARD:
             move_forward()

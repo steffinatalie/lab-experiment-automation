@@ -4,8 +4,8 @@ import settings
 class Communicate:
     
     # KZG
-    sensor_port = settings.DEFAULT_SENSOR_PORT # default: None, testing: settings.DEFAULT_SENSOR_PORT
-    actuator_port = settings.DEFAULT_ACTUATOR_PORT # default: None, testing: settings.DEFAULT_ACTUATOR_PORT
+    sensor_port = None # default: None, testing: settings.DEFAULT_SENSOR_PORT
+    actuator_port = None # default: None, testing: settings.DEFAULT_ACTUATOR_PORT
     port_state = 1 # default: None, values: (None, 1), testing: 1
     
 
@@ -81,7 +81,7 @@ class Communicate:
     
     """
     wait probably all these should be @property instead
-    or like just com.variable ???
+    or like just use com.variable ???
     
     """
     
