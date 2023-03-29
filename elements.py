@@ -29,8 +29,10 @@ MAYBE:
 
 BUG:
 - multiple logs, bug or not depends on your perspective
+- manual buttons
 
 TODO:
+- change time config, add data limit
 - disable log button when log already opened
 - close the log when main window closed
 - display folder name
@@ -744,10 +746,12 @@ class LeftBottomFrame:
     # NAVIGATIONS
     
     def push_actuator(self):
-        com.publish_manual_control_state(settings.FORWARD)
+        # com.publish_manual_control_state(settings.FORWARD)
+        com.publish_manual_control_state(settings.BACKWARD)
     
     def pull_actuator(self):
-        com.publish_manual_control_state(settings.BACKWARD)
+        # com.publish_manual_control_state(settings.BACKWARD)
+        com.publish_manual_control_state(settings.FORWARD)
     
     def idle_actuator(self):
         com.publish_manual_control_state(settings.IDLE)

@@ -27,6 +27,7 @@ Experiment state : start, stop, killed, paused
 Read state       : reading, notreading
 
 TODO:
+- read based on data limit
 - manual reading
 - modifiy all the prints [non stop IDLE at log]
 - get the experiment folder
@@ -59,7 +60,9 @@ def time_keeper():
     # if start button pressed
     if experiment_state == settings.START:
         # move to initial position
-        move_forward()
+        # move_forward()
+        move_backward()
+
         
         # stop the actuator
         idle()
@@ -77,7 +80,8 @@ def time_keeper():
             countdown(time_interval)
             
             # move the sensors to the reading position
-            move_backward()
+            # move_backward()
+            move_forward()
             
             # stop the actuator
             idle()
@@ -96,7 +100,8 @@ def time_keeper():
             th.join()
             
             # go back to the initial position
-            move_forward()
+            # move_forward()
+            move_backward()
             
             # stop the actuator
             idle()
@@ -153,7 +158,7 @@ def data_write():
         count += 1
         filename = f"{folder_path}\input{count}.xlsx"
     
-    print(f"\nIs writing to {filename}")
+    print(f"\nIs writing to {filename}\n")
     
     c1 = ["Timestamp"]
     c2 = [f"Sensor{i}" for i in range(1,21)]
@@ -176,7 +181,7 @@ def data_write():
         
         """don't use list comprehension
         """
-        list = [float(x.strip()) for x in decoded.split(',')]
+        list = [float(x.strip()) for x in decoded.split(',') if '-' not in x]
         timestamp = {"Timestamp": datetime.datetime.now()}
         data = {f"Sensor{index+1}": value for index, value in enumerate(list)}
         data.update(timestamp)
