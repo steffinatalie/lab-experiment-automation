@@ -27,6 +27,7 @@ Experiment state : start, stop, killed, paused (maybe)
 Read state       : reading, not reading
 
 TODO:
+- read based on data limit
 - check excel file regarding None returned if conversion error occurs 
 - when running new experiment without closing the gui first, empty the dataframe
 - manual reading
@@ -54,7 +55,9 @@ def time_keeper():
     # if start button pressed
     if experiment_state == settings.START:
         # move to initial position
-        move_forward()
+        # move_forward()
+        move_backward()
+
         
         # stop the actuator
         idle()
@@ -72,7 +75,8 @@ def time_keeper():
             countdown(time_interval)
             
             # move the sensors to the reading position
-            move_backward()
+            # move_backward()
+            move_forward()
             
             # stop the actuator
             idle()
@@ -91,7 +95,8 @@ def time_keeper():
             th.join()
             
             # go back to the initial position
-            move_forward()
+            # move_forward()
+            move_backward()
             
             # stop the actuator
             idle()
@@ -148,7 +153,7 @@ def data_write():
         count += 1
         filename = f"{folder_path}\input{count}.xlsx"
     
-    print(f"\nIs writing to {filename}")
+    print(f"\nIs writing to {filename}\n")
     
     c1 = ["Timestamp"]
     c2 = [f"Sensor{i}" for i in range(1,21)]
