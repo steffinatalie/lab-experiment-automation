@@ -9,7 +9,7 @@ from communicate_v2 import Communicate as com
 import os
 
 experiment_state = None
-read_state = None
+read_state = False
 count = 0
 is_timekeeping = False
 
@@ -63,7 +63,8 @@ def time_keeper():
         idle()
         
         
-        time_interval, read_duration, executions = [x for x in com.update_time_config()]
+        # time_interval, read_duration, executions = [x for x in com.update_time_config()]
+        time_interval, data_limit, executions = [x for x in com.update_time_config()]
         
         # convert minutes to seconds
         time_interval *= settings.TIME_MULTIPLIER
@@ -82,17 +83,21 @@ def time_keeper():
             idle()
             
             # begin reading data from sensors
-            read_state = settings.START
+            read_state = True
             # print("is reading")
-            th = threading.Thread(target=data_write)
-            th.start()
+            # th = threading.Thread(target=data_write)
+            # th.start()
+            
+            data_write(data_limit)
             
             # reading duration
-            countdown(read_duration)
+            # countdown(read_duration)
+            # while(read_state != False):
+            #     read_state = com.update_read_state()
             
             # stop reading
-            read_state = settings.STOP
-            th.join()
+            # read_state = False
+            # th.join()
             
             # go back to the initial position
             # move_forward()
@@ -122,7 +127,7 @@ def experiment_state_check():
         
         if experiment_state == settings.STOP:
             idle()
-            read_state = False
+            read_state = settings.STOP
             is_timekeeping = False
 
         
@@ -135,7 +140,7 @@ def experiment_state_check():
     is_timekeeping = False
             
 
-def data_write():
+def data_write(data_limit):
     global read_state, count, ser_sensor
     
     # xyz
@@ -164,8 +169,8 @@ def data_write():
     
     # print(df)
     
-
-    while read_state == settings.START:
+    count_data = 0
+    while read_state == True and count_data <= data_limit:
         # print("is reading\n")
         
         line = ser_sensor.readline()
@@ -176,6 +181,7 @@ def data_write():
         
         try:
             decoded_list = decoded.split(',')
+            count_data+=1
         except:
             continue
         

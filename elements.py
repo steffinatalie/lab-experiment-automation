@@ -349,22 +349,41 @@ class LeftTopFrame:
             column=2, row=1
         )
         
-        self.label_read_duration = Label(
+        # self.label_read_duration = Label(
+        #     self.location,
+        #     text="Read Duration (s)  "
+        # )
+        # self.label_read_duration.grid(
+        #     column=1, row=2, sticky='e'
+        # )
+        
+        # self.input_read_duration = Text(
+        #     self.location,
+        #     width=settings.INPUT_TEXT_WIDTH,
+        #     height=settings.INPUT_TEXT_HEIGHT
+        # )
+        # self.input_read_duration.grid(
+        #     column=2, row=2
+        # )
+        
+        self.label_data_limit = Label(
             self.location,
-            text="Read Duration (s)  "
+            text="Data Limit (n)  "
         )
-        self.label_read_duration.grid(
+        self.label_data_limit.grid(
             column=1, row=2, sticky='e'
         )
         
-        self.input_read_duration = Text(
+        self.input_data_limit = Text(
             self.location,
             width=settings.INPUT_TEXT_WIDTH,
             height=settings.INPUT_TEXT_HEIGHT
         )
-        self.input_read_duration.grid(
+        self.input_data_limit.grid(
             column=2, row=2
         )
+        
+        
         
         self.label_executions = Label(
             self.location,
@@ -392,7 +411,8 @@ class LeftTopFrame:
             print(f"[ignore] port error handling {com.update_port_state() + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
-                        int(float(self.input_read_duration.get(1.0, "end-1c"))),
+                        # int(float(self.input_read_duration.get(1.0, "end-1c"))),
+                        int(float(self.input_data_limit.get(1.0, "end-1c"))),
                         int(float(self.input_executions.get(1.0, "end-1c")))]
         
             com.publish_experiment_state(settings.START)
