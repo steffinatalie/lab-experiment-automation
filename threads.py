@@ -23,19 +23,14 @@ previous_manual_control_state = None
 # ser_actuator = serial.Serial("COM4", 9800, timeout=1)
 
 """
-Experiment state : start, stop, killed, paused 
-Read state       : reading, notreading
+Experiment state : start, stop, killed, paused (maybe)
+Read state       : reading, not reading
 
 TODO:
+- check excel file regarding None returned if conversion error occurs 
+- when running new experiment without closing the gui first, empty the dataframe
 - manual reading
-- modifiy all the prints [non stop IDLE at log]
-- get the experiment folder
-- try except print error to log
-- make it won't ovveride the previous files
-- stop needs improvement
-- read state should also be sent through serial to the other arduino
-- handling if arduino not detected
-- first thing when main is called is to check availability of arduino
+- modifiy all the prints [problem: non stop IDLE at log]
 
 """
 
@@ -138,7 +133,7 @@ def experiment_state_check():
 def data_write():
     global read_state, count, ser_sensor
     
-    # KZG
+    # xyz
     # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
     # path = utils.create_folder(settings.FOLDER_READINGS)
@@ -174,9 +169,12 @@ def data_write():
          
         decoded = line.decode()
         
-        """don't use list comprehension
-        """
-        list = [float(x.strip()) for x in decoded.split(',')]
+        try:
+            decoded_list = decoded.split(',')
+        except:
+            continue
+        
+        list = [utils.conversion(x) for x in decoded_list]
         timestamp = {"Timestamp": datetime.datetime.now()}
         data = {f"Sensor{index+1}": value for index, value in enumerate(list)}
         data.update(timestamp)

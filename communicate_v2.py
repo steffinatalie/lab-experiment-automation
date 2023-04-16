@@ -3,7 +3,7 @@ import settings
 
 class Communicate:
     
-    # KZG
+    # xyz
     sensor_port = None # default: None, testing: settings.DEFAULT_SENSOR_PORT
     actuator_port = None # default: None, testing: settings.DEFAULT_ACTUATOR_PORT
     port_state = 1 # default: None, values: (None, 1), testing: 1

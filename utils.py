@@ -23,6 +23,13 @@ def create_folder(folder):
     
     return dir
 
+def conversion(x):
+    # remove spaces and convert to float
+    try:
+        return float(x.strip())
+    except:
+        return None 
+
 def dummy():
     pass
 
