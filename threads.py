@@ -173,9 +173,12 @@ def data_write(data_limit):
     while read_state == True and count_data <= data_limit:
         # print("is reading\n")
         
-        line = ser_sensor.readline()
+        # line = ser_sensor.readline()
+        rl = utils.ReadLine(ser_sensor)
+        line = rl.readline()
         while(line.decode() == ''):
-            line = ser_sensor.readline()
+            # line = ser_sensor.readline()
+            line = rl.readline()
          
         decoded = line.decode()
         
