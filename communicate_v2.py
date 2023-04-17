@@ -23,6 +23,8 @@ class Communicate:
     manual_control_state = None
     experiment_folder_path = None
     
+    avg_values = None
+    
     
     
     # PUBLISHES

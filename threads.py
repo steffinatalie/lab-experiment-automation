@@ -7,6 +7,7 @@ import datetime
 import pandas as pd
 from communicate_v2 import Communicate as com
 import os
+import multiprocessing
 
 experiment_state = None
 read_state = False
@@ -27,6 +28,9 @@ Experiment state : start, stop, killed, paused (maybe)
 Read state       : reading, not reading
 
 TODO:
+- send average distance value to gui
+- check first file written
+- try stop the reading halfway
 - read based on data limit
 - check excel file regarding None returned if conversion error occurs 
 - manual reading
@@ -199,6 +203,16 @@ def data_write(data_limit):
     with pd.ExcelWriter(filename) as writer:
         df.to_excel(writer, sheet_name="Sheet1", index=False)
         
+    # send the average value to the gui
+    ranges = [(0, 5), (5, 10), (10, 15), (15, 20)]
+    
+    with multiprocessing.Pool(processes=4) as pool:
+        avg_values = pool.starmap(utils.calc_avg, [(df, start_col, end_col) for start_col, end_col in ranges])
+        
+    com.avg_values = sum(avg_values)
+    
+    
+        
     
 
         
@@ -238,34 +252,39 @@ def manual_control_time_keeper():
     
     if previous_manual_control_state != com.manual_control_state:
         is_timekeeping = False
+        previous_manual_control_state = com.manual_control_state
         
     # if manual_control_state == settings.KILLED:
     #     is_timekeeping = False
     #     idle()
 
 def manual_control_state_check():
-    global manual_control_state, is_timekeeping
+    global manual_control_state, is_timekeeping, previous_manual_control_state
     
     th = threading.Thread(target=manual_control_time_keeper)
     th.start()
     
-    # previous_manual_control_state = com.manual_control_state
+    previous_manual_control_state = com.manual_control_state
     while manual_control_state != settings.KILLED:
-        is_timekeeping = True
         manual_control_state = com.manual_control_state
         time.sleep(0.5)
         
         if manual_control_state == settings.FORWARD:
+            is_timekeeping = True
             move_forward()
             
         elif manual_control_state == settings.IDLE:
+            is_timekeeping = True
             idle()
             
         elif manual_control_state == settings.BACKWARD:
+            is_timekeeping = True
             move_backward()
     
     is_timekeeping = False
     idle()
+    
+    return
     
 def port_assignment():
     global ser_sensor, ser_actuator

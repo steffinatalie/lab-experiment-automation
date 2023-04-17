@@ -1,4 +1,4 @@
-from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, simpledialog
+from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, RIGHT, BOTH, filedialog
 import settings
 import threads
 from communicate_v2 import Communicate as com
@@ -13,12 +13,10 @@ import askFolderName_test2
 
 import terminalToGui_test
 
-import tkinter as tk #bro
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from tkinter import filedialog
 import os
 
 
@@ -67,7 +65,7 @@ class RightBottom1Frame:
     def browse_files(self):
         file_path = filedialog.askopenfilename(initialdir=self.default_path)
         if file_path:
-            self.label.config(text=file_path)
+            # self.label.config(text=file_path)
             self.open_file(file_path)
         
     def open_file(self, file_path):
@@ -96,27 +94,37 @@ class RightTopFrame:
         
         """
 
-        self.data2 = {'Execution': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-         'Average distance': [9.8, 12, 8, 7.2, 6.9, 7, 6.5, 6.2, 5.5, 6.3, 6.9, 7, 6.5, 6.2, 5.5, 6.3]
+        self.data = {'Execution': [0 for i in range(1, 21)],
+         'Average distance': [0 for i in range(1, 21)]
          }  
-        self.df2 = pd.DataFrame(self.data2)
+        self.df = pd.DataFrame(self.data)
+        
+        self.fig = plt.figure(figsize=(7, 6), dpi=70)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.location)
+        self.canvas.get_tk_widget().pack()
+        
+        self.ax = self.fig.add_subplot(111)
+        self.line, = self.ax.plot(self.df['Average distance'], self.df['Execution'])
+        
+        
 
-        self.figure2 = plt.Figure(figsize=(7, 6), dpi=70)
-        self.ax2 = self.figure2.add_subplot(111)
-        self.line2 = FigureCanvasTkAgg(self.figure2, self.location)
-        self.line2.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH)
-        self.df2 = self.df2[['Execution', 'Average distance']].groupby('Execution').sum()
-        self.df2.plot(kind='line', legend=True, ax=self.ax2, color='r', marker='o', fontsize=7)
-        self.ax2.set_title('Data Graph')
+        # self.figure = plt.Figure(figsize=(7, 6), dpi=70)
+        # self.ax = self.figure.add_subplot(111)
+        # self.line = FigureCanvasTkAgg(self.figure, self.location)
+        # self.line.get_tk_widget().pack(side=RIGHT, fill=BOTH)
+        # self.df = self.df[['Execution', 'Average distance']].groupby('Execution').sum()
+        # self.df.plot(kind='line', legend=True, ax=self.ax, color='r', marker='o', fontsize=7)
+        # self.ax.set_title('Data Graph')
 
 
 
 
 class LeftTopFrame:
-    def __init__(self, root, location, leftBottomFrame):
+    def __init__(self, root, location, leftBottomFrame, rightTopFrame):
         self.root = root
         self.location = location
         self.leftBottomFrame = leftBottomFrame
+        self.rightTopFrame = rightTopFrame
         
         
         
@@ -435,8 +443,8 @@ class LeftTopFrame:
                 threads.main()
                 
                 # run displays callback
-                # th = threading.Thread(target= self.displays_callback())
-                # th.start()
+                th = threading.Thread(target= self.displays_callback())
+                th.start()
                 
                 self.start_button.config(
                     state="disabled"
@@ -519,6 +527,9 @@ class LeftTopFrame:
             # self.time_left_until_next_execution_variable = com.minutes_countdown
             self.actuator_state_variable = com.actuator_state
             self.read_state_variable = com.read_state
+            
+            # graph callback
+            # self.rightTopFrame.
         
         
 class LeftBottomFrame:

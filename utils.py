@@ -1,6 +1,8 @@
 import settings
 import os
 from communicate_v2 import Communicate as com
+import pandas as pd 
+import numpy as np
 
 def width_prct(percentage):
     return (settings.WINDOW_WIDTH / 100) * percentage
@@ -29,6 +31,9 @@ def conversion(x):
         return float(x.strip())
     except:
         return None 
+    
+def calc_avg(data, start_col, end_col):
+    return data.iloc[:, start_col:end_col].mean().mean()
 
 def dummy():
     pass

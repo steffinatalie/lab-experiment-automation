@@ -49,8 +49,8 @@ right_bottom_1_frame.place(x=utils.width_prct(45), y=utils.height_prct(80))
 
 # frames
 lbf = LeftBottomFrame(left_bottom_frame)
-ltf = LeftTopFrame(root, left_top_frame, lbf)
 rtf = RightTopFrame(right_top_frame)
+ltf = LeftTopFrame(root, left_top_frame, lbf, rtf)
 rb1f = RightBottom1Frame(right_bottom_1_frame)
 
 
