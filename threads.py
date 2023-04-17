@@ -29,7 +29,6 @@ Read state       : reading, not reading
 TODO:
 - read based on data limit
 - check excel file regarding None returned if conversion error occurs 
-- when running new experiment without closing the gui first, empty the dataframe
 - manual reading
 - modifiy all the prints [problem: non stop IDLE at log]
 
@@ -50,7 +49,7 @@ def time_keeper():
     global experiment_state, is_timekeeping, read_state
     
     # updating experiment state
-    experiment_state = com.update_experiment_state()
+    experiment_state = com.experiment_state
     
     # if start button pressed
     if experiment_state == settings.START:
@@ -63,8 +62,8 @@ def time_keeper():
         idle()
         
         
-        # time_interval, read_duration, executions = [x for x in com.update_time_config()]
-        time_interval, data_limit, executions = [x for x in com.update_time_config()]
+        # time_interval, read_duration, executions = [x for x in com.time_config]
+        time_interval, data_limit, executions = [x for x in com.time_config]
         
         # convert minutes to seconds
         time_interval *= settings.TIME_MULTIPLIER
@@ -93,7 +92,7 @@ def time_keeper():
             # reading duration
             # countdown(read_duration)
             # while(read_state != False):
-            #     read_state = com.update_read_state()
+            #     read_state = com.read_state
             
             # stop reading
             # read_state = False
@@ -118,10 +117,10 @@ def time_keeper():
             
 
 def experiment_state_check():
-    global experiment_state, is_timekeeping, read_state
+    global experiment_state, is_timekeeping, read_state, count
 
     while experiment_state != settings.KILLED:
-        experiment_state = com.update_experiment_state()
+        experiment_state = com.experiment_state
         # time.sleep(0.5)
 
         
@@ -132,7 +131,7 @@ def experiment_state_check():
 
         
         if experiment_state == settings.START and not is_timekeeping:
-            
+            count = 0
             is_timekeeping = True
             th = threading.Thread(target=time_keeper)
             th.start()
@@ -147,7 +146,7 @@ def data_write(data_limit):
     # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
     # path = utils.create_folder(settings.FOLDER_READINGS)
-    folder_path = com.update_experiment_folder_path()
+    folder_path = com.experiment_folder_path
     
     
     
@@ -199,6 +198,8 @@ def data_write(data_limit):
         
     with pd.ExcelWriter(filename) as writer:
         df.to_excel(writer, sheet_name="Sheet1", index=False)
+        
+    
 
         
 def move_forward():
@@ -235,7 +236,7 @@ def manual_control_time_keeper():
     # so it can start another command
     
     
-    if previous_manual_control_state != com.update_manual_control_state():
+    if previous_manual_control_state != com.manual_control_state:
         is_timekeeping = False
         
     # if manual_control_state == settings.KILLED:
@@ -248,10 +249,10 @@ def manual_control_state_check():
     th = threading.Thread(target=manual_control_time_keeper)
     th.start()
     
-    # previous_manual_control_state = com.update_manual_control_state
+    # previous_manual_control_state = com.manual_control_state
     while manual_control_state != settings.KILLED:
         is_timekeeping = True
-        manual_control_state = com.update_manual_control_state()
+        manual_control_state = com.manual_control_state
         time.sleep(0.5)
         
         if manual_control_state == settings.FORWARD:
@@ -269,8 +270,8 @@ def manual_control_state_check():
 def port_assignment():
     global ser_sensor, ser_actuator
     
-    sensor_port = com.update_sensor_port()
-    actuator_port = com.update_actuator_port()
+    sensor_port = com.sensor_port
+    actuator_port = com.actuator_port
     
     ser_sensor = serial.Serial(sensor_port, 9800, timeout=1)
     ser_actuator = serial.Serial(actuator_port, 9800, timeout=1)

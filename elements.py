@@ -32,28 +32,17 @@ BUG:
 - manual buttons
 
 TODO:
-- change time config, add data limit
+- refactor the tests
+- check displays callback
 - disable log button when log already opened
 - close the log when main window closed
-- display folder name
-- ask folder name before start the program (if already exist ask to change or override)
-- disable manual when auto
-- check the select port using two arduinos
 - check whether port is flipped
 - display count executions
-- button for actuator move 
-- widget for changing com port
-- try daemon thread
-- create n minutes n seconds left until the next reading
-- display reading countdown
-- create serial monitor or graph ???
-- create experiment time estimation
 - create warning before closing window during experiment (experiment must be stopped first, if not stopped window can't be closed)
 - create warning if experiment stopped when sensors are still below the heater
 - create pause and continue
 - connect this to discord bot so it would call bang normen during emergency wkwkwwk
 - save latest time config
-- create experiment log
 """
 
 
@@ -167,19 +156,19 @@ class LeftTopFrame:
         
         
         # DISPLAY MINUTES COUNTDOWN UNTIL THE NEXT EXECUTION
-        self.time_left_until_next_execution_variable = IntVar()
-        self.time_left_until_next_execution_variable.set(0)
+        # self.time_left_until_next_execution_variable = IntVar()
+        # self.time_left_until_next_execution_variable.set(0)
         
-        self.countdown_next_execution_label = Label(
-            self.location,
-            text="Countdown next execution (m) :"
-        ).grid(columnspan=2, column=0, row=4, rowspan=2, pady=3, padx=10, sticky='sw')
+        # self.countdown_next_execution_label = Label(
+        #     self.location,
+        #     text="Countdown next execution (m) :"
+        # ).grid(columnspan=2, column=0, row=4, rowspan=2, pady=3, padx=10, sticky='sw')
         
-        self.time_left_until_next_execution_label = Label(
-            self.location,
-            text="",
-            textvariable=self.time_left_until_next_execution_variable
-        ).grid(columnspan=2, column=1, row=4, rowspan=2, sticky='s')
+        # self.time_left_until_next_execution_label = Label(
+        #     self.location,
+        #     text="",
+        #     textvariable=self.time_left_until_next_execution_variable
+        # ).grid(columnspan=2, column=1, row=4, rowspan=2, sticky='s')
         
         
         
@@ -408,7 +397,7 @@ class LeftTopFrame:
 
         try:
             #KZG
-            print(f"[ignore] port error handling {com.update_port_state() + 1}")
+            print(f"[ignore] port error handling {com._port_state + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         # int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -435,11 +424,11 @@ class LeftTopFrame:
         """
         askFolderName_test2.ask_for_text(self.root) 
         
-        if com.update_experiment_folder_path() != None:
+        if com.experiment_folder_path != None:
 
                 # display the folder name
                 self.experiment_folder_variable.set(
-                    com.update_experiment_folder_display()
+                    com.experiment_folder_display
                 )
                 
                 # run experiment
@@ -474,7 +463,7 @@ class LeftTopFrame:
 
     def error_popup(self):
         msg = "Invalid time configurations"
-        if com.update_actuator_port() == None or com.update_sensor_port() == None:
+        if com.actuator_port == None or com.sensor_port == None:
             msg = "Invalid ports \nand time configurations"
         messagebox.showerror(
             title="Error",
@@ -525,11 +514,11 @@ class LeftTopFrame:
         #     )
         
     def displays_callback(self):
-        while com.update_experiment_state() != settings.KILLED:
-            self.executions_count_variable = com.update_count_executions()
-            self.time_left_until_next_execution_variable = com.update_minutes_countdown()
-            self.actuator_state_variable = com.update_actuator_state()
-            self.read_state_variable = com.update_read_state()
+        while com.experiment_state != settings.KILLED:
+            self.executions_count_variable = com.count_executions
+            # self.time_left_until_next_execution_variable = com.minutes_countdown
+            self.actuator_state_variable = com.actuator_state
+            self.read_state_variable = com.read_state
         
         
 class LeftBottomFrame:

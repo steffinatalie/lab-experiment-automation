@@ -86,15 +86,15 @@ class LeftMiddleFrame:
     #     th.start()
 
     # def status_update(self):
-    #     experiment_state = com.update_experiment_state()
+    #     experiment_state = com.experiment_state
     #     while experiment_state != settings.KILLED:
     #         # print("status")
-    #         n = com.update_count_executions()
+    #         n = com.count_executions
     #         if n == None:
     #             n = 0
             
     #         self.label_n["text"] = f"Executed :   {n} times"
-    #         experiment_state = com.update_experiment_state()
+    #         experiment_state = com.experiment_state
             
     #     print("hey i am dead")
         
@@ -284,10 +284,10 @@ class LeftTopFrame:
         )
         
     def experiment_state_callback(self):
-        experiment_state = com.update_experiment_state()
+        experiment_state = com.experiment_state
         
         while experiment_state == settings.START:
-            experiment_state = com.update_experiment_state()
+            experiment_state = com.experiment_state
         
         self.start_button.config(
             state="normal"

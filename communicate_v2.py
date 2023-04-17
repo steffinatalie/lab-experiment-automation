@@ -79,57 +79,51 @@ class Communicate:
         
     # UPDATES
     
-    """
-    wait probably all these should be @property instead
-    or like just use com.variable ???
+    # @staticmethod
+    # def update_read_state():
+    #     return Communicate.read_state
     
-    """
+    # @staticmethod
+    # def update_actuator_state():
+    #     return Communicate.actuator_state
     
-    @staticmethod
-    def update_read_state():
-        return Communicate.read_state
+    # @staticmethod
+    # def update_minutes_countdown():
+    #     return Communicate.minutes_countdown
     
-    @staticmethod
-    def update_actuator_state():
-        return Communicate.actuator_state
+    # @staticmethod
+    # def update_experiment_folder_display():
+    #     return Communicate.experiment_folder_display
     
-    @staticmethod
-    def update_minutes_countdown():
-        return Communicate.minutes_countdown
+    # @staticmethod
+    # def update_experiment_folder_path():
+    #     return Communicate.experiment_folder_path
     
-    @staticmethod
-    def update_experiment_folder_display():
-        return Communicate.experiment_folder_display
+    # @staticmethod
+    # def update_manual_control_state():
+    #     return Communicate.manual_control_state
     
-    @staticmethod
-    def update_experiment_folder_path():
-        return Communicate.experiment_folder_path
+    # @staticmethod
+    # def update_port_state():
+    #     return Communicate.port_state
     
-    @staticmethod
-    def update_manual_control_state():
-        return Communicate.manual_control_state
+    # @staticmethod
+    # def update_sensor_port():
+    #     return Communicate.sensor_port
     
-    @staticmethod
-    def update_port_state():
-        return Communicate.port_state
+    # @staticmethod
+    # def update_actuator_port():
+    #     return Communicate.actuator_port
     
-    @staticmethod
-    def update_sensor_port():
-        return Communicate.sensor_port
+    # @staticmethod
+    # def update_experiment_state():
+    #     return Communicate.experiment_state
     
-    @staticmethod
-    def update_actuator_port():
-        return Communicate.actuator_port
+    # @staticmethod
+    # def update_time_config():
+    #     return Communicate.time_config
     
-    @staticmethod
-    def update_experiment_state():
-        return Communicate.experiment_state
-    
-    @staticmethod
-    def update_time_config():
-        return Communicate.time_config
-    
-    @staticmethod
-    def update_count_executions():
-        return Communicate.count_executions
+    # @staticmethod
+    # def update_count_executions():
+    #     return Communicate.count_executions
 

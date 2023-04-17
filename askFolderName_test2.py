@@ -82,6 +82,6 @@ def ask_for_text(root):
     root.wait_window(dialog)
     text = dialog.result
     if text is not None:
-        print("You entered:", com.update_experiment_folder_path())
+        print("You entered:", com.experiment_folder_path)
         
 
