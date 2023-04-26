@@ -7,7 +7,7 @@ import datetime
 import pandas as pd
 from communicate_v2 import Communicate as com
 import os
-import multiprocessing
+import numpy as np
 
 experiment_state = None
 read_state = False
@@ -27,7 +27,11 @@ previous_manual_control_state = None
 Experiment state : start, stop, killed, paused (maybe)
 Read state       : reading, not reading
 
+BUG:
+- auto to manual
+
 TODO:
+- create the file during the wait time
 - send average distance value to gui
 - check first file written
 - try stop the reading halfway
@@ -59,11 +63,11 @@ def time_keeper():
     if experiment_state == settings.START:
         # move to initial position
         # move_forward()
-        move_backward()
+        # move_backward()
 
         
         # stop the actuator
-        idle()
+        # idle()
         
         
         # time_interval, read_duration, executions = [x for x in com.time_config]
@@ -130,7 +134,7 @@ def experiment_state_check():
         
         if experiment_state == settings.STOP:
             idle()
-            read_state = settings.STOP
+            read_state = False
             is_timekeeping = False
 
         
@@ -146,70 +150,42 @@ def experiment_state_check():
 def data_write(data_limit):
     global read_state, count, ser_sensor
     
-    # xyz
-    # ser_sensor = serial.Serial("COM4", 9800, timeout=1)
     
-    # path = utils.create_folder(settings.FOLDER_READINGS)
     folder_path = com.experiment_folder_path
     
     
     
     # file naming and prevent override
     count += 1
-    filename = f"{folder_path}\input{count}.xlsx"
+    filename = f"{folder_path}\input{count}.txt"
     if os.path.isfile(filename) == True:
         count += 1
-        filename = f"{folder_path}\input{count}.xlsx"
+        filename = f"{folder_path}\input{count}.txt"
     
     print(f"\nIs writing to {filename}\n")
     
-    c1 = ["Timestamp"]
-    c2 = [f"Sensor{i}" for i in range(1,21)]
-    c = c1+c2
+    file = open(filename, 'w')
     
-    df = pd.DataFrame(columns=c)
-    df.to_excel(filename, index=False)
-    
-    # print(df)
+    print("begin")
+    rl = utils.ReadLine(ser_sensor)
     
     count_data = 0
-    while read_state == True and count_data <= data_limit:
+    while read_state == True and count_data < data_limit:
         # print("is reading\n")
         
         # line = ser_sensor.readline()
-        rl = utils.ReadLine(ser_sensor)
         line = rl.readline()
-        while(line.decode() == ''):
+        # while(line.decode() == ''):
             # line = ser_sensor.readline()
-            line = rl.readline()
+            # line = rl.readline()
          
         decoded = line.decode()
         
-        try:
-            decoded_list = decoded.split(',')
-            count_data+=1
-        except:
-            continue
+        file.write(decoded)
         
-        list = [utils.conversion(x) for x in decoded_list]
-        timestamp = {"Timestamp": datetime.datetime.now()}
-        data = {f"Sensor{index+1}": value for index, value in enumerate(list)}
-        data.update(timestamp)
-        datas = [data]
-        
-        ndf = pd.DataFrame(datas)
-        df = pd.concat([df, ndf], axis=0)
-        
-    with pd.ExcelWriter(filename) as writer:
-        df.to_excel(writer, sheet_name="Sheet1", index=False)
-        
-    # send the average value to the gui
-    ranges = [(0, 5), (5, 10), (10, 15), (15, 20)]
+        count_data+=1
     
-    with multiprocessing.Pool(processes=4) as pool:
-        avg_values = pool.starmap(utils.calc_avg, [(df, start_col, end_col) for start_col, end_col in ranges])
-        
-    com.avg_values = sum(avg_values)
+    file.close()
     
     
         
@@ -249,10 +225,10 @@ def manual_control_time_keeper():
     # it will interrupt the current time countdown
     # so it can start another command
     
-    
-    if previous_manual_control_state != com.manual_control_state:
-        is_timekeeping = False
-        previous_manual_control_state = com.manual_control_state
+    while manual_control_state != settings.KILLED:
+        if previous_manual_control_state != com.manual_control_state:
+            is_timekeeping = False
+            previous_manual_control_state = com.manual_control_state
         
     # if manual_control_state == settings.KILLED:
     #     is_timekeeping = False
@@ -273,11 +249,11 @@ def manual_control_state_check():
             is_timekeeping = True
             move_forward()
             
-        elif manual_control_state == settings.IDLE:
+        if manual_control_state == settings.IDLE:
             is_timekeeping = True
             idle()
             
-        elif manual_control_state == settings.BACKWARD:
+        if manual_control_state == settings.BACKWARD:
             is_timekeeping = True
             move_backward()
     

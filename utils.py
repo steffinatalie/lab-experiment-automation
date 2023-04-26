@@ -63,5 +63,29 @@ class ReadLine:
             else:
                 self.buf.extend(data)
     
+
+# class ReadLine:
+#     def __init__(self, s):
+#         self.buf = bytearray()
+#         self.s = s
+    
+#     def readline(self):
+#         i = self.buf.find(b"\n")
+#         if i >= 0:
+#             r = self.buf[:i+1]
+#             self.buf = self.buf[i+1:]
+#             return r
+#         while True:
+#             i = max(1, min(2048, self.s.in_waiting))
+#             data = bytearray(i)
+#             n = self.s.readinto(data)
+#             self.buf.extend(data[:n])
+#             i = self.buf.find(b"\n")
+#             if i >= 0:
+#                 r = self.buf[:i+1]
+#                 self.buf = self.buf[i+1:]
+#                 return r
+
+
     
     

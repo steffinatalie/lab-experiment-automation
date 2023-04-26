@@ -58,19 +58,19 @@ void loop() {
   while (r == '2'){
     Serial.print("forward");
     forward();
-    delay(4000);
+    delay(1000);
     r = Serial.read();
   }
   while (r == '3'){
     Serial.print("idle");
     idle();
-    delay(4000);
+    delay(1000);
     r = Serial.read();
   }
   while (r == '4'){
     Serial.print("backward");
     backward();
-    delay(4000);
+    delay(1000);
     r = Serial.read();
   }
 }

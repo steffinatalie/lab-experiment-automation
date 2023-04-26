@@ -30,6 +30,9 @@ BUG:
 - manual buttons
 
 TODO:
+- give more details in the error popup : ports not applied
+- ask for the starting position ??
+- open the log together with the main window
 - refactor the tests
 - check displays callback
 - disable log button when log already opened
@@ -405,7 +408,7 @@ class LeftTopFrame:
 
         try:
             #KZG
-            print(f"[ignore] port error handling {com._port_state + 1}")
+            print(f"[ignore] port error handling {com.port_state + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
                         # int(float(self.input_read_duration.get(1.0, "end-1c"))),
@@ -443,8 +446,8 @@ class LeftTopFrame:
                 threads.main()
                 
                 # run displays callback
-                th = threading.Thread(target= self.displays_callback())
-                th.start()
+                # th = threading.Thread(target= self.displays_callback())
+                # th.start()
                 
                 self.start_button.config(
                     state="disabled"
@@ -670,6 +673,9 @@ class LeftBottomFrame:
         )
         self.refresh_button.grid(column=0, row=4, columnspan=2, pady=5, sticky='n')
         
+        # refresh the port option from the start
+        self.refresh_port()
+        
     @property
     def get_ports(self):
         ports = []
@@ -702,6 +708,8 @@ class LeftBottomFrame:
                               command=lambda value=port: self.sensor_port_variable.set(value))
             menu2.add_command(label=port,
                               command=lambda value=port: self.actuator_port_variable.set(value))
+            
+
         
     
     def apply_port(self):

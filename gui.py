@@ -54,12 +54,12 @@ ltf = LeftTopFrame(root, left_top_frame, lbf, rtf)
 rb1f = RightBottom1Frame(right_bottom_1_frame)
 
 
-# def kill():
-#     com.publish_experiment_state(settings.KILLED)
-#     root.after(2500)
-#     root.destroy()
+def kill():
+    com.publish_experiment_state(settings.KILLED)
+    root.after(1000)
+    root.destroy()
     
-# root.protocol('WM_DELETE_WINDOW', kill)
+root.protocol('WM_DELETE_WINDOW', kill)
 
 #run the window 
 root.mainloop()

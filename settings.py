@@ -23,12 +23,12 @@ IDLE = '3'
 BACKWARD = '4'
 
 # xyz
-TIME_MULTIPLIER = 3 # change to 60
+TIME_MULTIPLIER = 5 # change to 60
 
 
-PUSH_DURATION = 3 # default 26
-PULL_DURATION = 3 # default 26
-IDLE_SEND_DURATION = 1 # you just gotta send it once and it will be idle until change occur
+PUSH_DURATION = 10 # default 26
+PULL_DURATION = 10 # default 26
+IDLE_SEND_DURATION = 2 # you just gotta send it once and it will be idle until change occur
 
 MODE_MANUAL = 0
 MODE_AUTO = 1
