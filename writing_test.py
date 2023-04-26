@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 
 # Open serial port
-ser = serial.Serial("COM6", 9600, timeout=1)
+ser = serial.Serial("COM4", 9600, timeout=1)
 
 # Create ReadLine object
 rl = utils.ReadLine(ser)

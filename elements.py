@@ -30,6 +30,8 @@ BUG:
 - manual buttons
 
 TODO:
+- start stop button affect com.manual_control_state
+- create popup for manual auto radio button if serial not established
 - give more details in the error popup : ports not applied
 - ask for the starting position ??
 - open the log together with the main window
@@ -407,7 +409,6 @@ class LeftTopFrame:
     def start(self, event):
 
         try:
-            #KZG
             print(f"[ignore] port error handling {com.port_state + 1}")
         
             time_config = [int(float(self.input_time_interval.get(1.0, "end-1c"))), 
@@ -459,7 +460,7 @@ class LeftTopFrame:
         
     def stop(self, event):
 
-        com.publish_experiment_state(settings.STOP)
+        com.publish_experiment_state(settings.KILLED)
         
         self.start_button.config(
                 state="normal"
@@ -482,20 +483,8 @@ class LeftTopFrame:
         )
         
     def auto_manual_enable(self):
-        if self.auto_manual_variable.get() == settings.MODE_MANUAL:
-            # buttons 
-            self.start_button.config(state="disabled")
-            self.leftBottomFrame.push_actuator_button.config(state="normal")
-            self.leftBottomFrame.pull_actuator_button.config(state="normal")
-            self.leftBottomFrame.idle_actuator_button.config(state="normal")
-            self.leftBottomFrame.start_read_button.config(state="normal")
-            self.leftBottomFrame.save_read_button.config(state="normal")
-            
-            # run manual thread
-            threads.manual_control()
-            
-            # print("Manual mode")
-        else:
+        if self.auto_manual_variable.get() == settings.MODE_AUTO:
+            com.publish_experiment_state(settings.KILLED)
             # kill manual thread
             com.publish_manual_control_state(settings.KILLED)
             
@@ -507,9 +496,37 @@ class LeftTopFrame:
             self.leftBottomFrame.idle_actuator_button.config(state="disabled")
             self.leftBottomFrame.start_read_button.config(state="disabled")
             self.leftBottomFrame.save_read_button.config(state="disabled")
+
+        elif com.experiment_state != settings.KILLED:
+            self.radiobutton_error_popup()
+            return
+        elif self.auto_manual_variable.get() == settings.MODE_MANUAL:
+            com.publish_experiment_state(settings.START)
+            com.publish_manual_control_state(settings.START)
             
-            # print("Auto mode")
-        
+
+            # buttons 
+            self.start_button.config(state="disabled")
+            self.stop_button.config(state="disabled")
+            self.leftBottomFrame.push_actuator_button.config(state="normal")
+            self.leftBottomFrame.pull_actuator_button.config(state="normal")
+            self.leftBottomFrame.idle_actuator_button.config(state="normal")
+            self.leftBottomFrame.start_read_button.config(state="normal")
+            self.leftBottomFrame.save_read_button.config(state="normal")
+            
+            # run manual thread
+            threads.manual_control()
+            
+            # print("Manual mode")
+
+            
+    
+    def radiobutton_error_popup(self):
+        msg = "Experiment still running"
+        messagebox.showerror(
+            title="Error",
+            message=msg
+        )
         
     def experiment_log_window(self, event):
         # self.experiment_log_button.config(

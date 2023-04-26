@@ -9,7 +9,7 @@ class Communicate:
     port_state = None # default: None, values: (None, 1), testing: 1
     
 
-    experiment_state = None # default: None, testing: settings.START
+    experiment_state = settings.KILLED # default: None, testing: settings.START
     experiment_folder_display = None
     time_config = []
     

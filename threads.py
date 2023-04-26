@@ -9,6 +9,7 @@ from communicate_v2 import Communicate as com
 import os
 import numpy as np
 
+
 experiment_state = None
 read_state = False
 count = 0
@@ -31,6 +32,8 @@ BUG:
 - auto to manual
 
 TODO:
+- change all the variable = com.variable to just use com.variable
+- time interval - push pull idle duration
 - create the file during the wait time
 - send average distance value to gui
 - check first file written
@@ -81,22 +84,23 @@ def time_keeper():
             
             # wait for the time interval
             countdown(time_interval)
+            if experiment_state != settings.KILLED:
             
             # move the sensors to the reading position
             # move_backward()
-            move_forward()
+                move_forward()
             
             # stop the actuator
-            idle()
+                idle()
             
             # begin reading data from sensors
-            read_state = True
+            # read_state = True
             # print("is reading")
             # th = threading.Thread(target=data_write)
             # th.start()
             
-            data_write(data_limit)
-            
+                data_write(data_limit)
+                
             # reading duration
             # countdown(read_duration)
             # while(read_state != False):
@@ -108,24 +112,26 @@ def time_keeper():
             
             # go back to the initial position
             # move_forward()
-            move_backward()
+                move_backward()
             
             # stop the actuator
-            idle()
+                idle()
             
             
             # count the executions
-            execution_counter+=1
-            com.publish_count_executions(execution_counter)
+                execution_counter+=1
+                com.publish_count_executions(execution_counter)
             
         # stop time keeper and the experiment
         is_timekeeping = False
-        com.publish_experiment_state(settings.STOP)
+        com.publish_experiment_state(settings.KILLED)
         
             
 
 def experiment_state_check():
     global experiment_state, is_timekeeping, read_state, count
+
+    experiment_state = com.experiment_state
 
     while experiment_state != settings.KILLED:
         experiment_state = com.experiment_state
@@ -139,53 +145,73 @@ def experiment_state_check():
 
         
         if experiment_state == settings.START and not is_timekeeping:
+            read_state = True
             count = 0
             is_timekeeping = True
             th = threading.Thread(target=time_keeper)
             th.start()
             
+    print("is killed")
+    idle()
     is_timekeeping = False
+    read_state = False
             
 
 def data_write(data_limit):
     global read_state, count, ser_sensor
+
+    if experiment_state == settings.KILLED:
+        return
     
     
     folder_path = com.experiment_folder_path
     
-    
-    
     # file naming and prevent override
     count += 1
-    filename = f"{folder_path}\input{count}.txt"
+    filename = f"{folder_path}\input{count}.xlsx"
     if os.path.isfile(filename) == True:
         count += 1
-        filename = f"{folder_path}\input{count}.txt"
+        filename = f"{folder_path}\input{count}.xlsx"
     
     print(f"\nIs writing to {filename}\n")
-    
-    file = open(filename, 'w')
-    
-    print("begin")
+
+    c1 = ["Timestamp"]
+    c2 = [f"Sensor{i}" for i in range(1,17)]
+    c = c1+c2
+
+    df = pd.DataFrame(columns=c)
+   
+    counter = 0
+
+    # Create ReadLine object
     rl = utils.ReadLine(ser_sensor)
-    
-    count_data = 0
-    while read_state == True and count_data < data_limit:
-        # print("is reading\n")
-        
-        # line = ser_sensor.readline()
+
+   # Read data from serial port
+    while counter < data_limit and read_state == True:
         line = rl.readline()
-        # while(line.decode() == ''):
-            # line = ser_sensor.readline()
-            # line = rl.readline()
-         
-        decoded = line.decode()
         
-        file.write(decoded)
+        # Parse line of text
+
+        # vals = line.decode('latin-1').split(',')
+        # d = [float(v.strip()) for v in vals[1:]]
+        vals = line.decode('latin-1')
         
-        count_data+=1
+        decoded_list = vals.split(',')
+        
+        list = [utils.conversion(x) for x in decoded_list]
+        timestamp = {"Timestamp": datetime.datetime.now()}
+        data = {f"Sensor{index+1}": value for index, value in enumerate(list)}
+        data.update(timestamp)
+        datas = [data]
+        
+        ndf = pd.DataFrame(datas)
+        df = pd.concat([df, ndf], axis=0)
+
+        counter += 1
+
+    with pd.ExcelWriter(filename) as writer:
+        df.to_excel(writer, sheet_name="Sheet1", index=False)
     
-    file.close()
     
     
         
@@ -193,6 +219,9 @@ def data_write(data_limit):
 
         
 def move_forward():
+    if com.experiment_state == settings.KILLED:
+        return
+    
     print("FORWARD")
     try:
         ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
@@ -205,11 +234,15 @@ def idle():
     print("IDLE")
     try:
         ser_actuator.write(bytes(settings.IDLE, "utf-8"))
-        countdown(settings.IDLE_SEND_DURATION)
+        # countdown(settings.IDLE_SEND_DURATION)
     except:
         print("Serial communication not established")
+    
 
 def move_backward():
+    if com.experiment_state == settings.KILLED:
+        return
+    
     print("BACKWARD")
     try:
         ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
@@ -226,9 +259,9 @@ def manual_control_time_keeper():
     # so it can start another command
     
     while manual_control_state != settings.KILLED:
-        if previous_manual_control_state != com.manual_control_state:
+        if manual_control_state != com.manual_control_state:
             is_timekeeping = False
-            previous_manual_control_state = com.manual_control_state
+            manual_control_state = com.manual_control_state
         
     # if manual_control_state == settings.KILLED:
     #     is_timekeeping = False
@@ -240,8 +273,8 @@ def manual_control_state_check():
     th = threading.Thread(target=manual_control_time_keeper)
     th.start()
     
-    previous_manual_control_state = com.manual_control_state
-    while manual_control_state != settings.KILLED:
+    manual_control_state = com.manual_control_state
+    while com.manual_control_state != settings.KILLED:
         manual_control_state = com.manual_control_state
         time.sleep(0.5)
         
@@ -259,6 +292,7 @@ def manual_control_state_check():
     
     is_timekeeping = False
     idle()
+    print("is killed")
     
     return
     
