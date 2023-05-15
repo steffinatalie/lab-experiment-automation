@@ -26,9 +26,9 @@ BACKWARD = '4'
 TIME_MULTIPLIER = 5 # change to 60
 
 
-PUSH_DURATION = 4 # default 26
-PULL_DURATION = 4 # default 26
-IDLE_SEND_DURATION = 2 # you just gotta send it once and it will be idle until change occur
+PUSH_DURATION = 25 # default 26
+PULL_DURATION = 25 # default 26
+IDLE_SEND_DURATION = 1 # you just gotta send it once and it will be idle until change occur
 
 MODE_MANUAL = 0
 MODE_AUTO = 1

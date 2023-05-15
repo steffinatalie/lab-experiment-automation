@@ -30,6 +30,8 @@ BUG:
 - manual buttons
 
 TODO:
+- create warn to remind the starting position
+- change push pull duration
 - start stop button affect com.manual_control_state
 - create popup for manual auto radio button if serial not established
 - give more details in the error popup : ports not applied
@@ -708,6 +710,7 @@ class LeftBottomFrame:
     
     def refresh_port(self):
         ports = self.get_ports
+        print('\n')
         for port in ports:
             print(f"Detected port: {port}")
             

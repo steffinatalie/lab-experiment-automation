@@ -32,6 +32,7 @@ BUG:
 - auto to manual
 
 TODO:
+- begin by start reading and then move
 - change all the variable = com.variable to just use com.variable
 - time interval - push pull idle duration
 - create the file during the wait time
@@ -88,10 +89,10 @@ def time_keeper():
             
             # move the sensors to the reading position
             # move_backward()
-                move_forward()
+                move_forward(settings.PUSH_DURATION)
             
             # stop the actuator
-                idle()
+                idle(1)
             
             # begin reading data from sensors
             # read_state = True
@@ -112,10 +113,10 @@ def time_keeper():
             
             # go back to the initial position
             # move_forward()
-                move_backward()
+                move_backward(settings.PULL_DURATION)
             
             # stop the actuator
-                idle()
+                idle(1)
             
             
             # count the executions
@@ -139,7 +140,7 @@ def experiment_state_check():
 
         
         if experiment_state == settings.STOP:
-            idle()
+            idle(1)
             read_state = False
             is_timekeeping = False
 
@@ -152,7 +153,7 @@ def experiment_state_check():
             th.start()
             
     print("is killed")
-    idle()
+    idle(1)
     is_timekeeping = False
     read_state = False
             
@@ -218,19 +219,19 @@ def data_write(data_limit):
     
 
         
-def move_forward():
+def move_forward(duration):
     if com.experiment_state == settings.KILLED:
         return
     
     print("FORWARD")
     try:
         ser_actuator.write(bytes(settings.FORWARD, "utf-8"))
-        countdown(settings.PUSH_DURATION)
+        countdown(duration)
     except:
         print("Serial communication not established")
     
 
-def idle():
+def idle(duration):
     print("IDLE")
     try:
         ser_actuator.write(bytes(settings.IDLE, "utf-8"))
@@ -239,14 +240,14 @@ def idle():
         print("Serial communication not established")
     
 
-def move_backward():
+def move_backward(duration):
     if com.experiment_state == settings.KILLED:
         return
     
     print("BACKWARD")
     try:
         ser_actuator.write(bytes(settings.BACKWARD, "utf-8"))
-        countdown(settings.PULL_DURATION)
+        countdown(duration)
     except:
         print("Serial communication not established")
 
@@ -280,18 +281,18 @@ def manual_control_state_check():
         
         if manual_control_state == settings.FORWARD:
             is_timekeeping = True
-            move_forward()
+            move_forward(2)
             
         if manual_control_state == settings.IDLE:
             is_timekeeping = True
-            idle()
+            idle(1)
             
         if manual_control_state == settings.BACKWARD:
             is_timekeeping = True
-            move_backward()
+            move_backward(2)
     
     is_timekeeping = False
-    idle()
+    idle(1)
     print("is killed")
     
     return
