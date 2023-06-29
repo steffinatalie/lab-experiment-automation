@@ -24,12 +24,10 @@
 
 ![Product Name Screen Shot](img/window.png)
 
-This project is created to enhance experiment eficiency in doing repetitive task and managing experiment datas.
+This project is created to automize the repetitive experimental data collection, enhance the experiment time efficiency, reduce human manual intervention, and makes the experiment easier to customize. 
 
-Bried explanation about the experiment:
-* lorem ipsum
-* lorem ipsum
-* lorem ipsum
+Brief explanation about the experiment:
+To measure the rate of peat burning. It is being done by burning peat soil for a certain period of time while measuring the distance of the peat's subsidence periodically.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -38,15 +36,10 @@ Bried explanation about the experiment:
 ### Prerequisites
 
 * python
-  ```sh
-  lorem ipsum
-  ```
-
 * tkinter
 * pyserial
 * pandas
 * matplotlib
-* lorem ipsum
 
 ### Installation
 
@@ -56,18 +49,8 @@ Clone the repo
    ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Usage
-
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## License
 
 Distributed under the MIT License.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Acknowledgements
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
