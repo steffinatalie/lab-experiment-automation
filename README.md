@@ -4,7 +4,7 @@
 
 ![Product Name Screen Shot](img/window.png)
 
-This project is created to automize the repetitive experimental data collection, enhance the experiment time efficiency, reduce human manual intervention, and makes the experiment easier to customize. It utilizes communication between PC and multiple arduinos to manage sensors and actuator.
+This project is created to automize the repetitive experiment data collection, enhance the experiment time efficiency, reduce human manual intervention, and makes the experiment easier to customize. It utilizes communication between PC and multiple arduinos to manage sensors and actuator.
 
 Brief explanation about the experiment:
 * The goal is to measure the rate of peat burning. 
