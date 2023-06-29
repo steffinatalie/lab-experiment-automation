@@ -5,18 +5,9 @@ from communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
 import utils
-
-
-# testings
-
-import askFolderName_test2
-
-import terminalToGui_test
-
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 import os
 
 
@@ -436,7 +427,7 @@ class LeftTopFrame:
         
         """edit this
         """
-        askFolderName_test2.ask_for_text(self.root) 
+        utils.ask_for_text(self.root) 
         
         if com.experiment_folder_path != None:
 
@@ -535,7 +526,7 @@ class LeftTopFrame:
         #         state="disabled"
         #     )
         try:
-            terminalToGui_test.main()
+            utils.terminal()
         except:
             pass
         
