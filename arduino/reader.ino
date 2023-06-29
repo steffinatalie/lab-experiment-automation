@@ -25,19 +25,7 @@ void setup() {
 }
 
 void loop() {
-  // static state
-  // delay 30 menit
 
-  // maju
-
-  // baca
-  // delay 1 menit
-
-  // mundur
-
-
-
-  
   // Get a distance measurement and store it as distance_cm:
   distance_cm = mySensor.distance();
 

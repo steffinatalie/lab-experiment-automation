@@ -1,6 +1,6 @@
-import settings
+import tools.settings as settings
 import os
-from communicate_v2 import Communicate as com
+from tools.communicate_v2 import Communicate as com
 import tkinter as tk
 from tkinter import messagebox
 import datetime

@@ -1,8 +1,8 @@
 from tkinter import *
-import settings
-import utils
-from elements import LeftTopFrame, LeftBottomFrame, RightTopFrame, RightBottom1Frame
-from communicate_v2 import Communicate as com
+import tools.settings as settings
+import tools.utils as utils 
+from tools.elements import LeftTopFrame, LeftBottomFrame, RightTopFrame, RightBottom1Frame
+from tools.communicate_v2 import Communicate as com
 # import time
 # import threading
 # from tkterminal import Terminal

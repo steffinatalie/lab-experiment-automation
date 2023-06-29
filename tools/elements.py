@@ -1,10 +1,10 @@
 from tkinter import Button, Text, Label, messagebox, StringVar, OptionMenu, Radiobutton, IntVar, RIGHT, BOTH, filedialog
-import settings
-import threads
-from communicate_v2 import Communicate as com
+import tools.settings as settings
+import tools.threads as threads
+from tools.communicate_v2 import Communicate as com
 import threading
 import serial.tools.list_ports as port_list
-import utils
+import tools.utils as utils
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg

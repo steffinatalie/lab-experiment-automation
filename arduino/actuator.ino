@@ -1,59 +1,76 @@
-//#include <SharpIR.h>
-//
-//// Define model and input pin:
-//#define IRPin A1
-//#define model 430
-
-// Create variable to store the distance:
-int distance_cm;
-
-
-// Create a new instance of the SharpIR class:
-//SharpIR mySensor = SharpIR(IRPin, model);
 
 int pin1 = 8;
 int pin2 = 9;
 
+int maju = 5;
+int diam = 3;
+int mundur = 4;
+
 int ena = 10;
 
-void setup(){
+void setup() {
+  pinMode(maju, OUTPUT);
+  pinMode(diam, OUTPUT);
+  pinMode(mundur, OUTPUT);
+  
   pinMode(pin1, OUTPUT);
   pinMode(pin2, OUTPUT);
   pinMode(ena, OUTPUT);
-
-//  Serial.begin(9600);
+  
+  // Begin serial communication at a baudrate of 9600:
+  Serial.begin(9600);
+  Serial.setTimeout(1);
 }
 
-//void loop(){
-//  // Get a distance measurement and store it as distance_cm:
-//  distance_cm = mySensor.distance();
-//
-//  Serial.print(distance_cm);
-//  Serial.print('\n');
-//
-//  delay(1000);
-//
-//  if (distance_cm 
-//}
-
-void loop(){
+void forward(){
+  digitalWrite(maju, HIGH);
+  digitalWrite(diam, LOW);
+  digitalWrite(mundur, LOW);
+  
   analogWrite(ena, 255);
   digitalWrite(pin1, HIGH);
   digitalWrite(pin2, LOW);
-  delay(35000);
+}
 
+void idle(){
+  digitalWrite(maju, LOW);
+  digitalWrite(diam, HIGH);
+  digitalWrite(mundur, LOW);
+  
   digitalWrite(pin1, LOW);
   digitalWrite(pin2, LOW);
-  delay(2000);
+}
 
+void backward(){
+  digitalWrite(maju, LOW);
+  digitalWrite(diam, LOW);
+  digitalWrite(mundur, HIGH);
+  
   analogWrite(ena, 255);
   digitalWrite(pin1, LOW);
   digitalWrite(pin2, HIGH);
-  delay(35000);
+}
 
-  digitalWrite(pin1, LOW);
-  digitalWrite(pin2, LOW);
-  delay(2000);
+void loop() {
+  while(!Serial.available());
 
-  
+  char r = Serial.read();
+  while (r == '2'){
+    Serial.print("forward");
+    forward();
+    delay(1000);
+    r = Serial.read();
+  }
+  while (r == '3'){
+    Serial.print("idle");
+    idle();
+    delay(1000);
+    r = Serial.read();
+  }
+  while (r == '4'){
+    Serial.print("backward");
+    backward();
+    delay(1000);
+    r = Serial.read();
+  }
 }

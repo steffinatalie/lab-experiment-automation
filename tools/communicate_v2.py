@@ -1,5 +1,5 @@
 # for testing, don't delete
-import settings
+import tools.settings as settings
 
 class Communicate:
     

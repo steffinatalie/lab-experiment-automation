@@ -22,7 +22,7 @@
 
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+[![Product Name Screen Shot][product-screenshot]](img/window.png)
 
 This project is created to enhance experiment eficiency in doing repetitive task and managing experiment datas.
 
